@@ -12,22 +12,22 @@ public class Amount {
     }
 
     public Amount(AmountDTO amount) {
-
+        this.amount = amount.amount();
     }
 
     public double getAmount() {
-        return 0;
+        return amount;
     }
 
     public void increaseAmountBySum(AmountDTO amount) {
-
+        this.amount += amount.amount();
     }
 
     public void decreaseAmountBySum(AmountDTO amount) {
-
+        this.amount -= amount.amount();
     }
 
     public void decreaseAmountByPercentage(PercentageDTO percentage) {
-
+        this.amount -= this.amount * (1 - (double) percentage.percentage() / 100);
     }
 }
