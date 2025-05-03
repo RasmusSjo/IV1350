@@ -4,9 +4,6 @@ import main.se.kth.iv1350.rassjo.pos.model.Amount;
 import main.se.kth.iv1350.rassjo.pos.model.Sale;
 import main.se.kth.iv1350.rassjo.pos.model.SaleItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Utility class that provides methods for converting domain objects to their DTO.
  */
@@ -29,16 +26,11 @@ public class Mapper {
      * @return the DTO representing the sale
      */
     public static SaleDTO toDTO(Sale sale) {
-        List<SaleItemDTO> items = new ArrayList<>();
-        for (SaleItem item : sale.getItems()) {
-            items.add(toDTO(item));
-        }
-
         return new SaleDTO(
                 sale.getStartTime(),
                 sale.getTotalCost(),
-                sale.getTotalVAT(),
-                items,
+                sale.getTotalVat(),
+                sale.getItems(),
                 sale.getPayment(),
                 sale.getStatus());
     }
@@ -53,8 +45,8 @@ public class Mapper {
         return new SaleItemDTO(
                 item.getId(),
                 item.getName(),item.getDescription(),
-                item.getUnitPrice(),
-                item.getVATRate(),
+                item.getNetPrice(),
+                item.getVatRate(),
                 toDTO(item.getFinalPrice()),
                 item.getQuantity());
     }
