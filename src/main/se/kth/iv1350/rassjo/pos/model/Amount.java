@@ -40,34 +40,69 @@ public class Amount {
     }
 
     /**
-     * Increases this amount by the specified sum.
+     * Increases this monetary amount by the value of the given amount.
      *
-     * @param amount the DTO representing the sum to add
+     * @param amount the {@code Amount} representing the monetary value to add.
      */
+    public void increaseAmountBySum(Amount amount) {
+        this.amount += amount.getAmount();
+    }
 
+    /**
+     * Increases this monetary amount by the value of the given amount.
+     *
+     * @param amount the {@code AmountDTO} representing the monetary value to add.
+     */
     public void increaseAmountBySum(AmountDTO amount) {
         this.amount += amount.amount();
     }
 
     /**
-     * Decreases this amount by the specified sum.
+     * Decreases this monetary amount by the value of the given amount.
      *
-     * @param amount the DTO representing the sum to subtract
+     * @param amount the {@code Amount} representing the monetary value to subtract
+     */
+    public void decreaseAmountBySum(Amount amount) {
+        this.amount -= amount.getAmount();
+    }
+
+    /**
+     * Decreases this monetary amount by the value of the given amount.
+     *
+     * @param amount the {@code AmountDTO} representing the monetary value to subtract.
      */
     public void decreaseAmountBySum(AmountDTO amount) {
         this.amount -= amount.amount();
     }
 
     /**
-     * Decreases the monetary value of this amount by the specified percentage.
-     * <p>
-     * The calculation subtracts the portion of this amount determined by
-     * the given percentage DTO.
-     * </p>
+     * Increases the monetary amount by the specified percentage.
      *
-     * @param percentage the DTO containing the percentage to apply (e.g., 10 for a 10% reduction).
+     * @param percentage the {@code PercentageDTO} containing the percentage to apply (e.g., 10 for a 10% increase).
+     */
+    public void increaseAmountByPercentage(PercentageDTO percentage) {
+        this.amount *= (1 + (double) percentage.percentage() / 100);
+    }
+
+    /**
+     * Decreases this monetary amount by a given percentage.
+     *
+     * @param percentage the {@code PercentageDTO} containing the percentage to subtract (e.g., 25 for a 25% decrease)
      */
     public void decreaseAmountByPercentage(PercentageDTO percentage) {
-        this.amount -= this.amount * (1 - (double) percentage.percentage() / 100);
+        this.amount *= (1 - (double) percentage.percentage() / 100);
+    }
+
+    /**
+     * Converts the monetary amount into a string representation, separating the integer
+     * and decimal parts with a colon. Ensures that the decimal part always contains two
+     * digits by appending a zero if necessary.
+     *
+     * @return a string representation of the amount in the format "integerPart:decimalPart".
+     */
+    @Override
+    public String toString() {
+        AmountDTO amountForString = new AmountDTO(this.amount);
+        return amountForString.toString();
     }
 }
