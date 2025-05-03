@@ -10,6 +10,8 @@ import main.se.kth.iv1350.rassjo.pos.integration.HandlerFactory;
 import main.se.kth.iv1350.rassjo.pos.integration.InventoryHandler;
 import main.se.kth.iv1350.rassjo.pos.model.Sale;
 
+import java.time.LocalDateTime;
+
 /**
  * The SaleService class provides methods for managing the lifecycle of a sale, including
  * starting a sale, adding items to the sale, applying discounts, processing payments,
@@ -21,7 +23,7 @@ public class SaleService {
     private final InventoryHandler inventoryHandler;
     private final AccountingHandler accountingHandler;
     private final DiscountHandler discountHandler;
-    private final Sale currentSale;
+    private Sale currentSale;
 
     /**
      * Constructs an instance of the {@code SaleService} class, which is responsible
@@ -38,7 +40,12 @@ public class SaleService {
         currentSale = null;
     }
 
+    /**
+     * Initiates a new sale by creating a {@code Sale} instance with the current date and time.
+     */
     public void startSale() {
+        LocalDateTime startTime = LocalDateTime.now();
+        currentSale = new Sale(startTime);
     }
 
     public AmountDTO endSale() {
