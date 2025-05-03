@@ -10,8 +10,8 @@ import main.se.kth.iv1350.rassjo.pos.integration.DTOs.Mapper;
 public class CashPayment {
 
     private final AmountDTO totalCost;
-    private Amount paidAmount;
-    private Amount change;
+    private final Amount paidAmount;
+    private final Amount change;
 
     /**
      * Creates an instance of {@code CashPayment}, representing a cash payment transaction.
@@ -22,6 +22,7 @@ public class CashPayment {
     public CashPayment(AmountDTO totalCost, AmountDTO paidAmount) {
         this.totalCost = totalCost;
         this.paidAmount = new Amount(paidAmount);
+        change = calculateChange();
     }
 
     /**
@@ -51,7 +52,7 @@ public class CashPayment {
         return Mapper.toDTO(change);
     }
 
-    private void calculateChange() {
-        change = new Amount(totalCost.amount() - paidAmount.getAmount());
+    private Amount calculateChange() {
+        return new Amount(totalCost.amount() - paidAmount.getAmount());
     }
 }
