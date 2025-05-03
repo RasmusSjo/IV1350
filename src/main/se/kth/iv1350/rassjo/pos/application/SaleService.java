@@ -5,6 +5,7 @@ import main.se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import main.se.kth.iv1350.rassjo.pos.integration.DiscountHandler;
 import main.se.kth.iv1350.rassjo.pos.integration.HandlerFactory;
 import main.se.kth.iv1350.rassjo.pos.integration.InventoryHandler;
+import main.se.kth.iv1350.rassjo.pos.model.CashPayment;
 import main.se.kth.iv1350.rassjo.pos.model.Sale;
 
 import java.time.LocalDateTime;
@@ -81,7 +82,21 @@ public class SaleService {
         return null;
     }
 
+    /**
+     * Processes a cash payment for the current sale, updates the system with payment details,
+     * and adjusts the inventory and accounting systems accordingly.
+     *
+     * @param amount an {@code AmountDTO} representing the cash amount paid by the customer.
+     * @return an {@code AmountDTO} representing the change to be returned to the customer.
+     */
     public AmountDTO processCashPayment(AmountDTO amount) {
-        return null;
+        CashPayment payment = new CashPayment(currentSale.getTotalCost(), amount);
+        paymentService.processPayment(payment, Mapper.toDTO(currentSale));
+        currentSale.recordPayment(payment);
+
+        inventoryHandler.updateInventory(Mapper.toDTO(currentSale));
+        accountingHandler.recordSale(Mapper.toDTO(currentSale));
+
+        return payment.getChange();
     }
 }
