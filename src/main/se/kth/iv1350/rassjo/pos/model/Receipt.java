@@ -18,9 +18,9 @@ public class Receipt {
     private final CashPayment payment;
     private final SaleDTO saleInformation;
 
-    public Receipt(CashPayment payment, SaleDTO saleInformation) {
-        this.payment = payment;
+    public Receipt(SaleDTO saleInformation, CashPayment payment) {
         this.saleInformation = saleInformation;
+        this.payment = payment;
     }
 
     @Override
