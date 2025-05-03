@@ -48,8 +48,15 @@ public class SaleService {
         currentSale = new Sale(startTime);
     }
 
+    /**
+     * Ends the current sale and returns the total cost of the sale, which
+     * includes VAT and any applied discounts.
+     *
+     * @return an {@code AmountDTO} representing the total cost of the sale.
+     */
     public AmountDTO endSale() {
-        return null;
+        currentSale.end();
+        return currentSale.getTotalCost();
     }
 
     public SaleDTO addItem(ItemIdentifierDTO itemId, int quantity) {
