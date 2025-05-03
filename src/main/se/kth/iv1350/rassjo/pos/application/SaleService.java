@@ -10,6 +10,11 @@ import main.se.kth.iv1350.rassjo.pos.integration.HandlerFactory;
 import main.se.kth.iv1350.rassjo.pos.integration.InventoryHandler;
 import main.se.kth.iv1350.rassjo.pos.model.Sale;
 
+/**
+ * The SaleService class provides methods for managing the lifecycle of a sale, including
+ * starting a sale, adding items to the sale, applying discounts, processing payments,
+ * and finalizing the sale.
+ */
 public class SaleService {
 
     private final PaymentService paymentService;
@@ -18,6 +23,13 @@ public class SaleService {
     private final DiscountHandler discountHandler;
     private final Sale currentSale;
 
+    /**
+     * Constructs an instance of the {@code SaleService} class, which is responsible
+     * for managing the lifecycle of a sale.
+     *
+     * @param handlerFactory the {@code HandlerFactory} instance used to retrieve the
+     *                       necessary handlers the service depend on.
+     */
     public SaleService(HandlerFactory handlerFactory) {
         paymentService = new PaymentService();
         inventoryHandler = handlerFactory.getInventoryHandler();
@@ -27,7 +39,6 @@ public class SaleService {
     }
 
     public void startSale() {
-
     }
 
     public AmountDTO endSale() {
