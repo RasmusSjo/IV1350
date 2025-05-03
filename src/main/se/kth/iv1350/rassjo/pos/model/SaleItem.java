@@ -8,43 +8,45 @@ import main.se.kth.iv1350.rassjo.pos.integration.DTOs.PercentageDTO;
 public class SaleItem {
 
     private final ItemDTO itemInformation;
-    private Amount finalPrice;
+    private final Amount finalPrice;
     private int quantity;
 
     public SaleItem(ItemDTO itemInformation, int quantity) {
         this.itemInformation = itemInformation;
+        finalPrice = new Amount(itemInformation.netPrice().amount());
+        finalPrice.increaseAmountByPercentage(itemInformation.vatRate());
         this.quantity = quantity;
     }
 
     public ItemIdentifierDTO getId() {
-        return null;
+        return itemInformation.itemId();
     }
 
     public String getName() {
-        return null;
+        return itemInformation.name();
     }
 
     public String getDescription() {
-        return null;
+        return itemInformation.description();
     }
 
-    public AmountDTO getUnitPrice() {
-        return null;
+    public AmountDTO getNetPrice() {
+        return itemInformation.netPrice();
     }
 
-    public PercentageDTO getVATRate() {
-        return null;
+    public PercentageDTO getVatRate() {
+        return itemInformation.vatRate();
     }
 
     public Amount getFinalPrice() {
-        return null;
+        return finalPrice;
     }
 
     public int getQuantity() {
-        return 0;
+        return quantity;
     }
 
     public void increaseQuantity(int quantity) {
-
+        this.quantity += quantity;
     }
 }
