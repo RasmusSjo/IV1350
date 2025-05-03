@@ -9,7 +9,7 @@ public class SaleItem {
 
     private final ItemDTO itemInformation;
     private Amount finalPrice;
-    private final int quantity;
+    private int quantity;
 
     public SaleItem(ItemDTO itemInformation, int quantity) {
         this.itemInformation = itemInformation;
