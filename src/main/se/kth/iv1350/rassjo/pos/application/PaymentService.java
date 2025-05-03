@@ -1,10 +1,10 @@
 package main.se.kth.iv1350.rassjo.pos.application;
 
 import main.se.kth.iv1350.rassjo.pos.integration.CashRegister;
-import main.se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.SaleDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.ReceiptPrinter;
 import main.se.kth.iv1350.rassjo.pos.model.CashPayment;
+import main.se.kth.iv1350.rassjo.pos.model.Receipt;
 
 public class PaymentService {
 
@@ -16,7 +16,9 @@ public class PaymentService {
         receiptPrinter = new ReceiptPrinter();
     }
 
-    public AmountDTO processPayment(CashPayment payment, SaleDTO saleInformation) {
-        return null;
+    public void processPayment(CashPayment payment, SaleDTO saleInformation) {
+        cashRegister.addPayment(payment);
+        Receipt receipt = new Receipt(saleInformation, payment);
+        receiptPrinter.printReceipt(receipt);
     }
 }
