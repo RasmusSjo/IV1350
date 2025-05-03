@@ -1,10 +1,7 @@
 package main.se.kth.iv1350.rassjo.pos.application;
 
 import main.se.kth.iv1350.rassjo.pos.integration.AccountingHandler;
-import main.se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
-import main.se.kth.iv1350.rassjo.pos.integration.DTOs.CustomerIdentifierDTO;
-import main.se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
-import main.se.kth.iv1350.rassjo.pos.integration.DTOs.SaleDTO;
+import main.se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import main.se.kth.iv1350.rassjo.pos.integration.DiscountHandler;
 import main.se.kth.iv1350.rassjo.pos.integration.HandlerFactory;
 import main.se.kth.iv1350.rassjo.pos.integration.InventoryHandler;
@@ -59,15 +56,32 @@ public class SaleService {
         return currentSale.getTotalCost();
     }
 
+    /**
+     * Adds an item to the current sale with a specified quantity. If the
+     * item already exists in the sale, its quantity is updated.
+     *
+     * @param itemId the identifier of the item that will be added to the sale.
+     * @param quantity the quantity of the item that is being added.
+     * @return a {@code SaleDTO} representing the current state of the sale after adding the item.
+     */
     public SaleDTO addItem(ItemIdentifierDTO itemId, int quantity) {
+        if (currentSale.containsItemWithId(itemId)) {
+            currentSale.increaseItemWithId(itemId, quantity);
+            return Mapper.toDTO(currentSale);
+        }
+
+        ItemDTO itemInformation = inventoryHandler.getItemInformation(itemId);
+        currentSale.addItem(itemInformation, quantity);
+
+        return Mapper.toDTO(currentSale);
+    }
+
+    public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) {
+        // This method will not be implemented
         return null;
     }
 
     public AmountDTO processCashPayment(AmountDTO amount) {
-        return null;
-    }
-
-    public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) {
         return null;
     }
 }
