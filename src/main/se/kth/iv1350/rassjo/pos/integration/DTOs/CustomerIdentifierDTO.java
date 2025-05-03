@@ -1,4 +1,8 @@
 package main.se.kth.iv1350.rassjo.pos.integration.DTOs;
 
-public record CustomerIdentifierDTO(int id) {
+/**
+ * Represents a customer identifier.
+ *
+ * @param id The unique identifier of the customer.
+ */public record CustomerIdentifierDTO(int id) {
 }
