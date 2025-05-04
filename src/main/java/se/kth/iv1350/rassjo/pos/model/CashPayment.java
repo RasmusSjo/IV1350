@@ -1,5 +1,7 @@
 package se.kth.iv1350.rassjo.pos.model;
 
+import java.util.Objects;
+
 /**
  * Represents a cash payment where the total cost, paid amount,
  * and any change to be returned are handled.
@@ -13,7 +15,7 @@ public class CashPayment {
     /**
      * Creates an instance of {@code CashPayment}, representing a cash payment transaction.
      *
-     * @param totalCost the {@code Amount} object representing the total cost.
+     * @param totalCost  the {@code Amount} object representing the total cost.
      * @param paidAmount the {@code Amount} object representing the amount paid by the customer.
      */
     public CashPayment(Amount totalCost, Amount paidAmount) {
@@ -49,7 +51,19 @@ public class CashPayment {
         return change;
     }
 
-    private Amount calculateChange(Amount paidAmount, Amount totalCost){
+    private Amount calculateChange(Amount paidAmount, Amount totalCost) {
         return paidAmount.subtract(totalCost);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        CashPayment that = (CashPayment) o;
+        return Objects.equals(totalCost, that.totalCost) && Objects.equals(paidAmount, that.paidAmount) && Objects.equals(change, that.change);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(totalCost, paidAmount, change);
     }
 }
