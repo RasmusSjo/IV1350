@@ -22,6 +22,7 @@ public class Sale {
 	private final Amount totalVat;
 	private CashPayment payment;
 	private final Map<ItemIdentifierDTO, SaleItem> items;
+	private SaleItem lastAddedItem;
 	private SaleStatus status;
 
 	/**
@@ -36,6 +37,7 @@ public class Sale {
 		totalVat = new Amount(0);
 		payment = null;
 		items = new HashMap<>();
+		lastAddedItem = null;
 		status = SaleStatus.REGISTERING;
 	}
 
@@ -93,6 +95,16 @@ public class Sale {
 	}
 
 	/**
+	 * Retrieves the last item added to the current sale.
+	 *
+	 * @return a {@code SaleItemDTO} representing the last item added to the sale,
+	 *         or {@code null} if no items have been added.
+	 */
+	public SaleItemDTO getLastAddedItem() {
+		return Mapper.toDTO(lastAddedItem);
+	}
+
+	/**
 	 * Retrieves the current status of the sale.
 	 *
 	 * @return the current {@code SaleStatus} of the sale, which can be one
@@ -135,6 +147,7 @@ public class Sale {
 	public void addItem(ItemDTO itemInformation, int quantity) {
 		SaleItem item = new SaleItem(itemInformation, quantity);
 		items.put(item.getId(), item);
+		lastAddedItem = item;
 
 		updateSaleCost(item, quantity);
 	}
@@ -170,4 +183,5 @@ public class Sale {
 		this.payment = payment;
 		status = SaleStatus.PAID;
 	}
+
 }

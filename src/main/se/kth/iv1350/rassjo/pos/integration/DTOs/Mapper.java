@@ -31,6 +31,7 @@ public class Mapper {
                 sale.getTotalCost(),
                 sale.getTotalVat(),
                 sale.getItems(),
+                sale.getLastAddedItem(),
                 sale.getPayment(),
                 sale.getStatus());
     }
