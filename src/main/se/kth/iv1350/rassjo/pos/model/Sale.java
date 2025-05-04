@@ -17,6 +17,8 @@ import java.util.Map;
  */
 public class Sale {
 
+	private static final int PERCENTAGE_BASE = 100;
+
 	private final LocalDateTime startTime;
 	private final Amount totalCost;
 	private final Amount totalVat;
@@ -133,6 +135,9 @@ public class Sale {
 	 */
 	public void increaseItemWithId(ItemIdentifierDTO itemId, int quantity) {
 		items.get(itemId).increaseQuantity(quantity);
+
+		updateSaleCost(items.get(itemId), quantity);
+		lastAddedItem = items.get(itemId);
 	}
 
 	/**
@@ -153,12 +158,12 @@ public class Sale {
 	}
 
 	private void updateSaleCost(SaleItem item, int addedQuantity) {
-		Amount increasedPrice = new Amount(item.getFinalPrice().getAmount() * addedQuantity);
-		Amount increasedVat = new Amount(increasedPrice.getAmount());
-		increasedVat.decreaseAmountByPercentage(item.getVatRate());
+		double addedItemCost = item.getFinalPrice().getAmount() * addedQuantity;
+		Amount increasedAmount = new Amount(addedItemCost);
+		Amount vatAmount = new Amount(addedItemCost - item.getNetPrice().amount() * addedQuantity);
 
-		totalCost.increaseAmountBySum(increasedPrice);
-		totalVat.increaseAmountBySum(increasedVat);
+		totalCost.increaseAmountBySum(increasedAmount);
+		totalVat.increaseAmountBySum(vatAmount);
 	}
 
 	public void applyDiscount(DiscountDTO discount) {
@@ -183,5 +188,4 @@ public class Sale {
 		this.payment = payment;
 		status = SaleStatus.PAID;
 	}
-
 }
