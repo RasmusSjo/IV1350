@@ -9,6 +9,7 @@ import se.kth.iv1350.rassjo.pos.model.CashPayment;
 import se.kth.iv1350.rassjo.pos.model.Sale;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * The SaleService class provides methods for managing the lifecycle of a sale, including
@@ -43,7 +44,11 @@ public class SaleService {
      */
     public void startSale() {
         LocalDateTime startTime = LocalDateTime.now();
-        currentSale = new Sale(startTime);
+        currentSale = new Sale(generateSaleId(), startTime);
+    }
+
+    private String generateSaleId() {
+        return UUID.randomUUID().toString();
     }
 
     /**

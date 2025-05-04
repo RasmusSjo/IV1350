@@ -54,6 +54,7 @@ public class Mapper {
         }
 
         return new SaleDTO(
+                sale.getSaleId(),
                 sale.getStartTime(),
                 toDTO(sale.getTotalCost()),
                 toDTO(sale.getTotalVat()),

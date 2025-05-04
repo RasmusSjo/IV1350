@@ -3,10 +3,7 @@ package se.kth.iv1350.rassjo.pos.model;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a sale consisting of the items being purchased, the items' total
@@ -17,6 +14,7 @@ import java.util.Map;
  */
 public class Sale {
 
+	private final String saleId;
 	private final LocalDateTime startTime;
 	private Amount totalCost;
 	private Amount totalVat;
@@ -26,12 +24,15 @@ public class Sale {
 	private SaleStatus status;
 
 	/**
-	 * Creates a new instance of a sale with the specified start time.
-	 * Initializes the total cost, total VAT, items, and status for the sale.
+	 * Initializes a new instance of the {@code Sale} class with the specified sale identifier
+	 * and start time. Sets the initial state of the sale, including default values for cost,
+	 * VAT, payment, and item collection.
 	 *
-	 * @param startTime the time at which the sale was initiated.
+	 * @param saleId the unique identifier for the sale.
+	 * @param startTime the date and time the sale was started.
 	 */
-	public Sale(LocalDateTime startTime) {
+	public Sale(String saleId, LocalDateTime startTime) {
+		this.saleId = saleId;
 		this.startTime = startTime;
 		totalCost = new Amount();
 		totalVat = new Amount();
@@ -39,6 +40,15 @@ public class Sale {
 		items = new HashMap<>();
 		lastAddedItem = null;
 		status = SaleStatus.REGISTERING;
+	}
+
+	/**
+	 * Retrieves the unique identifier associated with this sale.
+	 *
+	 * @return a {@code String} representing the unique identifier of the sale.
+	 */
+	public String getSaleId() {
+		return saleId;
 	}
 
 	/**
@@ -179,5 +189,29 @@ public class Sale {
 	public void recordPayment(CashPayment payment) {
 		this.payment = payment;
 		status = SaleStatus.PAID;
+	}
+
+	/**
+	 * Two {@link Sale}s are equal if their identifiers are equal.
+	 *
+	 * @param o the object to compare with this sale for equality.
+	 * @return {@code true} if the specified object has the same identifier as
+	 * 			this object; {@code false} otherwise.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		Sale sale = (Sale) o;
+		return Objects.equals(saleId, sale.saleId);
+	}
+
+	/**
+	 * Returns the hash code for the {@link Sale} object.
+	 *
+	 * @return an integer representing the hash code of the {@code Sale} object.
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(saleId);
 	}
 }
