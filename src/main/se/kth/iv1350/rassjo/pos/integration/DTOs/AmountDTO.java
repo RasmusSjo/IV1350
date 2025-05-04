@@ -10,25 +10,16 @@ public record AmountDTO(double amount) {
     /**
      * Converts the monetary amount into a string representation, separating the integer
      * and decimal parts with a colon. Ensures that the decimal part always contains two
-     * digits by appending a zero if necessary.
+     * digits.
      *
      * @return a string representation of the amount in the format "integerPart:decimalPart".
      */
     @Override
     public String toString(){
-        String doubleString = String.valueOf(amount);
-        String[] split = doubleString.split("\\.");
-
-        String integerPart = split[0];
-        String decimalPart = split[1];
-
-        if(decimalPart.length() == 1){
-            decimalPart += "0";
-        }
-        else if (decimalPart.length() > 2){
-            decimalPart = decimalPart.substring(0, 2);
-        }
-
-        return integerPart + ":" + decimalPart;
+        int integerPart = (int) amount;
+        int decimalPart = (int) ((amount - integerPart) * 100);
+        decimalPart = decimalPart < 0 ? -decimalPart : decimalPart;
+        decimalPart = decimalPart < 10 ? decimalPart * 10 : decimalPart;
+        return String.format("%d:%02d", integerPart, decimalPart);
     }
 }
