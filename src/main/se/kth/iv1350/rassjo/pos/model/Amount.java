@@ -3,11 +3,16 @@ package main.se.kth.iv1350.rassjo.pos.model;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.PercentageDTO;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * A monetary amount in Swedish Krona (SEK).
  */
 public class Amount {
 
+    private static final int HUNDRED_PERCENT = 100;
+    private static final int DECIMAL_PLACES = 2;
     private double amount;
 
     /**
@@ -18,6 +23,7 @@ public class Amount {
 
     public Amount(double amount) {
         this.amount = amount;
+        formatAmount();
     }
 
     /**
@@ -27,6 +33,7 @@ public class Amount {
      */
     public Amount(AmountDTO amount) {
         this.amount = amount.amount();
+        formatAmount();
     }
 
     /**
@@ -45,7 +52,7 @@ public class Amount {
      * @param amount the {@code Amount} representing the monetary value to add.
      */
     public void increaseAmountBySum(Amount amount) {
-        this.amount += amount.getAmount();
+        updateAmount(this.amount + amount.getAmount());
     }
 
     /**
@@ -54,7 +61,7 @@ public class Amount {
      * @param amount the {@code AmountDTO} representing the monetary value to add.
      */
     public void increaseAmountBySum(AmountDTO amount) {
-        this.amount += amount.amount();
+        updateAmount(this.amount + amount.amount());
     }
 
     /**
@@ -63,7 +70,7 @@ public class Amount {
      * @param amount the {@code Amount} representing the monetary value to subtract
      */
     public void decreaseAmountBySum(Amount amount) {
-        this.amount -= amount.getAmount();
+        updateAmount(this.amount - amount.getAmount());
     }
 
     /**
@@ -72,7 +79,7 @@ public class Amount {
      * @param amount the {@code AmountDTO} representing the monetary value to subtract.
      */
     public void decreaseAmountBySum(AmountDTO amount) {
-        this.amount -= amount.amount();
+        updateAmount(this.amount - amount.amount());
     }
 
     /**
@@ -81,7 +88,7 @@ public class Amount {
      * @param percentage the {@code PercentageDTO} containing the percentage to apply (e.g., 10 for a 10% increase).
      */
     public void increaseAmountByPercentage(PercentageDTO percentage) {
-        this.amount *= (1 + (double) percentage.percentage() / 100);
+        updateAmount(this.amount * (1 + (double) percentage.percentage() / HUNDRED_PERCENT));
     }
 
     /**
@@ -90,7 +97,7 @@ public class Amount {
      * @param percentage the {@code PercentageDTO} containing the percentage to subtract (e.g., 25 for a 25% decrease)
      */
     public void decreaseAmountByPercentage(PercentageDTO percentage) {
-        this.amount *= (1 - (double) percentage.percentage() / 100);
+        updateAmount(this.amount * (1 - (double) percentage.percentage() / HUNDRED_PERCENT));
     }
 
     /**
@@ -104,5 +111,20 @@ public class Amount {
     public String toString() {
         AmountDTO amountForString = new AmountDTO(this.amount);
         return amountForString.toString();
+    }
+
+    private void updateAmount(double amount){
+        this.amount = amount;
+        formatAmount();
+    }
+
+    /**
+     * Utility method for rounding the amount to two decimal places. Retrieved from
+     * <a href="https://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places">here<a/>.
+     */
+    private void formatAmount() {
+        BigDecimal bd = BigDecimal.valueOf(amount);
+        bd = bd.setScale(DECIMAL_PLACES, RoundingMode.HALF_UP);
+        amount = bd.doubleValue();
     }
 }
