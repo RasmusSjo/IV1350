@@ -31,7 +31,7 @@ public class SaleService {
      *                       necessary handlers the service depend on.
      */
     public SaleService(HandlerFactory handlerFactory) {
-        paymentService = new PaymentService();
+        paymentService = new PaymentService(handlerFactory.getReceiptPrinter());
         inventoryHandler = handlerFactory.getInventoryHandler();
         accountingHandler = handlerFactory.getAccountingHandler();
         discountHandler = handlerFactory.getDiscountHandler();
@@ -61,7 +61,7 @@ public class SaleService {
      * Adds an item to the current sale with a specified quantity. If the
      * item already exists in the sale, its quantity is updated.
      *
-     * @param itemId the identifier of the item that will be added to the sale.
+     * @param itemId   the identifier of the item that will be added to the sale.
      * @param quantity the quantity of the item that is being added.
      * @return a {@code SaleDTO} representing the current state of the sale after adding the item.
      */

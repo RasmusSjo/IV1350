@@ -1,6 +1,6 @@
 package main.se.kth.iv1350.rassjo.pos.application;
 
-import main.se.kth.iv1350.rassjo.pos.integration.CashRegister;
+import main.se.kth.iv1350.rassjo.pos.model.CashRegisterTracker;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.Mapper;
 import main.se.kth.iv1350.rassjo.pos.integration.ReceiptPrinter;
 import main.se.kth.iv1350.rassjo.pos.model.CashPayment;
@@ -14,7 +14,7 @@ import main.se.kth.iv1350.rassjo.pos.model.Sale;
  */
 public class PaymentService {
 
-    private final CashRegister cashRegister;
+    private final CashRegisterTracker cashRegisterHandler;
     private final ReceiptPrinter receiptPrinter;
 
     /**
@@ -25,9 +25,9 @@ public class PaymentService {
      * and the running balance of the cash register, while the {@code ReceiptPrinter}
      * handles printing of sales receipts.
      */
-    public PaymentService() {
-        cashRegister = new CashRegister();
-        receiptPrinter = new ReceiptPrinter();
+    public PaymentService(ReceiptPrinter receiptPrinter) {
+        this.cashRegisterHandler = new CashRegisterTracker();
+        this.receiptPrinter = receiptPrinter;
     }
 
     /**
@@ -39,7 +39,10 @@ public class PaymentService {
      *                about the payment.
      */
     public void processPayment(Sale sale, CashPayment payment) {
-        cashRegister.addPayment(payment);
+        // Here there would be logic for calling the actual cash register, not just its tracker
+        cashRegisterHandler.addPayment(payment);
+        cashRegisterHandler.dispenseChange(payment.getPaidAmount());
+
         ReceiptDTO receipt = new ReceiptDTO(Mapper.toDTO(sale), Mapper.toDTO(payment));
         receiptPrinter.printReceipt(receipt);
     }
