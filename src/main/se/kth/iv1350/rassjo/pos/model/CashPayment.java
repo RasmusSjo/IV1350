@@ -19,29 +19,29 @@ public class CashPayment {
     public CashPayment(Amount totalCost, Amount paidAmount) {
         this.totalCost = totalCost;
         this.paidAmount = new Amount(paidAmount);
-        change = calculateChange();
+        change = calculateChange(paidAmount, totalCost);
     }
 
     /**
      * Retrieves the total cost involved in the transaction.
      *
-     * @return an {@code Amount} object representing the total cost in SEK.
+     * @return an {@link Amount} object representing the total cost in SEK.
      */
     public Amount getTotalCost() {
         return totalCost;
     }
 
     /**
-     * Retrieves the paid amount as an {@link Amount}.
+     * Retrieves the paid amount in the transaction.
      *
-     * @return an {@link Amount} representing the amount paid.
+     * @return an {@link Amount} representing the amount paid in SEK.
      */
     public Amount getPaidAmount() {
         return paidAmount;
     }
 
     /**
-     * Retrieves the change as an {@link Amount}.
+     * Retrieves the change for the transaction.
      *
      * @return an {@link Amount} representing the change calculated from the payment.
      */
@@ -49,7 +49,7 @@ public class CashPayment {
         return change;
     }
 
-    private Amount calculateChange() {
-        return new Amount(paidAmount.getAmount().subtract(totalCost.getAmount()));
+    private Amount calculateChange(Amount paidAmount, Amount totalCost){
+        return paidAmount.subtract(totalCost);
     }
 }

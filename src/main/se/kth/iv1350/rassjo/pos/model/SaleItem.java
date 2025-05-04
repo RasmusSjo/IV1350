@@ -5,35 +5,28 @@ import main.se.kth.iv1350.rassjo.pos.integration.DTOs.ItemDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.PercentageDTO;
 
-import java.math.BigDecimal;
-
 /**
  * Represents an item within a sale. Contains information about the purchased item,
- *  its final price in the sale (including VAT and potential discounts), as
- * well as the quantity purchased.
+ * its final price in the sale (including VAT and potential discounts), its final
+ * total price (quantity adjusted), as well as the quantity purchased.
  */
-
 public class SaleItem {
 
     private final ItemDTO itemInformation;
     private final Amount finalUnitPrice;
-    private final Amount finalTotalPrice;
+    private Amount finalTotalPrice;
     private int quantity;
 
     /**
-     * Creates a new instance of SaleItem, representing a purchased item within a sale.
-     * The SaleItem includes information about the item, its final price (including VAT),
-     * and the quantity purchased.
+     * Creates a new {@link SaleItem} instance, representing a purchased item within a sale.
      *
-     * @param itemInformation the DTO containing static information about the item,
-     *                        such as its name, description, net price, and VAT rate.
-     * @param quantity        the number of items of this type that are being purchased.
+     * @param item      the {@link ItemDTO} containing static information about the item.
+     * @param quantity  the number of items of this type that are being purchased.
      */
-    public SaleItem(ItemDTO itemInformation, int quantity) {
-        this.itemInformation = itemInformation;
-        finalUnitPrice = new Amount(itemInformation.baseNetPrice().amount());
-        finalUnitPrice.increaseAmountByPercentage(itemInformation.vatRate());
-        finalTotalPrice = new Amount(finalUnitPrice.getAmount().multiply(BigDecimal.valueOf(quantity)));
+    public SaleItem(ItemDTO item, int quantity) {
+        this.itemInformation = item;
+        finalUnitPrice = new Amount(item.baseNetPrice().amount()).increaseBy(item.vatRate());
+        finalTotalPrice = new Amount(finalUnitPrice.multiplyByQuantity(quantity));
         this.quantity = quantity;
     }
 
@@ -118,6 +111,6 @@ public class SaleItem {
      */
     public void increaseQuantity(int quantity) {
         this.quantity += quantity;
-        finalTotalPrice.increaseAmountBySum(new Amount(finalUnitPrice.getAmount().multiply(BigDecimal.valueOf(quantity))));
+        finalTotalPrice = finalTotalPrice.add(finalUnitPrice.multiplyByQuantity(quantity));
     }
 }

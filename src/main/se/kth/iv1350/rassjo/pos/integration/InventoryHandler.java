@@ -2,7 +2,6 @@ package main.se.kth.iv1350.rassjo.pos.integration;
 
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,70 +47,70 @@ public class InventoryHandler {
                 new ItemDTO(new ItemIdentifierDTO(10001),
                         "Milk 1L",
                         "Fresh whole milk, 1 liter",
-                        new AmountDTO(BigDecimal.valueOf(19.95)),
+                        new AmountDTO("19.95"),
                         new PercentageDTO(12)));
 
         inventory.put(new ItemIdentifierDTO(10002),
                 new ItemDTO(new ItemIdentifierDTO(10002),
                         "Bread loaf",
                         "White bread loaf, ~500g",
-                        new AmountDTO(BigDecimal.valueOf(37.90)),
+                        new AmountDTO("37.90"),
                         new PercentageDTO(12)));
 
         inventory.put(new ItemIdentifierDTO(10003),
                 new ItemDTO(new ItemIdentifierDTO(10003),
                         "Eggs (6-pack)",
                         "Free-range eggs, pack of 6",
-                        new AmountDTO(BigDecimal.valueOf(44.95)),
+                        new AmountDTO("44.95"),
                         new PercentageDTO(12)));
 
         inventory.put(new ItemIdentifierDTO(10004),
                 new ItemDTO(new ItemIdentifierDTO(10004),
                         "Coffee 500g",
                         "Ground coffee, 500g bag",
-                        new AmountDTO(BigDecimal.valueOf(97.95)),
+                        new AmountDTO("97.95"),
                         new PercentageDTO(25)));
 
         inventory.put(new ItemIdentifierDTO(10005),
                 new ItemDTO(new ItemIdentifierDTO(10005),
                         "Plastic bags (2L)",
                         "Plastic freezer bags, 2L, 70-pack",
-                        new AmountDTO(BigDecimal.valueOf(15.95)),
+                        new AmountDTO("15.95"),
                         new PercentageDTO(25)));
 
         inventory.put(new ItemIdentifierDTO(10006),
                 new ItemDTO(new ItemIdentifierDTO(10006),
                         "Butter 200g",
                         "Salted butter, 200g stick",
-                        new AmountDTO(BigDecimal.valueOf(24.95)),
+                        new AmountDTO("24.95"),
                         new PercentageDTO(12)));
 
         inventory.put(new ItemIdentifierDTO(10007),
                 new ItemDTO(new ItemIdentifierDTO(10007),
                         "Cheese 300g",
                         "Gouda cheese, 300g",
-                        new AmountDTO(BigDecimal.valueOf(44.95)),
+                        new AmountDTO("44.95"),
                         new PercentageDTO(12)));
 
         inventory.put(new ItemIdentifierDTO(10008),
                 new ItemDTO(new ItemIdentifierDTO(10008),
                         "Apple (1 kg)",
                         "Red apples, 1 kg bag",
-                        new AmountDTO(BigDecimal.valueOf(29.95)),
-                        new PercentageDTO(6)));
+                        new AmountDTO("29.95"),
+                        new PercentageDTO(12)));
 
         inventory.put(new ItemIdentifierDTO(10009),
                 new ItemDTO(new ItemIdentifierDTO(10009),
                         "Tomahawk (900g)",
                         "Tomahawk steak, 900g, Swedish",
-                        new AmountDTO(BigDecimal.valueOf(449.00)),
-                        new PercentageDTO(6)));
+                        new AmountDTO("449.00"),
+                        new PercentageDTO(12)));
 
         inventory.put(new ItemIdentifierDTO(10010),
                 new ItemDTO(new ItemIdentifierDTO(10010),
                         "Orange juice 1L",
                         "Cold-pressed orange juice, 1L",
-                        new AmountDTO(BigDecimal.valueOf(32.95)),
+                        new AmountDTO("32.95"),
                         new PercentageDTO(12)));
     }
 }

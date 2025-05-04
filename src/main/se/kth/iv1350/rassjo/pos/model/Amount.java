@@ -6,87 +6,126 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * A monetary amount in Swedish Krona (SEK).
+ * A monetary amount in Swedish Krona (SEK). This value is immutable.
  */
 public class Amount {
 
+    private static final String DEFAULT_VALUE = "0.00";
     private static final int HUNDRED_PERCENT = 100;
     private static final int DECIMAL_PLACES = 2;
-    private BigDecimal amount;
+    private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_UP;
 
-    public Amount() {
-        this(BigDecimal.valueOf(0.0));
-    }
+    private final BigDecimal amount;
 
     /**
-     * Creates a new Amount with the specified initial value.
-     *
-     * @param amount the initial value.
+     * Creates a new {@link Amount} instance with a default value.
+     * <p>
+     * The default value is 0 SEK.
      */
-    public Amount(BigDecimal amount) {
-        this.amount = amount;
-        formatAmount();
+    public Amount() {
+        this(DEFAULT_VALUE);
     }
 
     /**
-     * Creates a new Amount from an Amount.
+     * Creates a new {@link Amount} instance with the specified integer initial value.
      *
-     * @param amount the {@code Amount} containing the monetary value
+     * @param amount the initial value as an integer.
+     */
+    public Amount(int amount) {
+        this(BigDecimal.valueOf(amount));
+    }
+
+    /**
+     * Creates a new {@link Amount} instance by copying the value from another {@code Amount} instance.
+     *
+     * @param amount the {@code Amount} instance whose value will be copied to the new {@code Amount} instance.
      */
     public Amount(Amount amount) {
-        this.amount = amount.getAmount();
-        formatAmount();
+        this(amount.getAmount());
     }
 
     /**
-     * Returns the current monetary value.
+     * Creates a new {@link Amount} instance with the specified initial value.
      *
-     * @return the amount as a double
+     * @param amount the initial value as a {@code String}. The string should
+     *               represent a valid decimal number.
      */
-
-    public BigDecimal getAmount() {
-        return amount;
+    public Amount(String amount) {
+        this(new BigDecimal(amount));
     }
 
     /**
-     * Increases this monetary amount by the value of the given amount.
+     * Creates a new {@code Amount} instance with the specified {@code BigDecimal} value.
+     * The value is formatted to have precisely two decimal places.
      *
-     * @param amount the {@code Amount} representing the monetary value to add.
+     * @param amount the monetary value to initialize the {@code Amount} instance,
+     *               represented as a {@code BigDecimal}.
      */
-    public void increaseAmountBySum(Amount amount) {
-        updateAmount(this.amount.add(amount.getAmount()));
+    private Amount(BigDecimal amount) {
+        this.amount = formatAmount(amount);
     }
 
     /**
-     * Decreases this monetary amount by the value of the given amount.
+     * Retrieves the monetary amount.
      *
-     * @param amount the {@code Amount} representing the monetary value to subtract
+     * @return a {@code String} representing the value of the monetary amount in plain text.
      */
-    public void decreaseAmountBySum(Amount amount) {
-        updateAmount(this.amount.subtract(amount.getAmount()));
+    public String getAmount() {
+        return amount.toPlainString();
     }
 
     /**
-     * Increases the monetary amount by the specified percentage.
+     * Returns an {@link Amount} representing the sum of this
+     * instance and the specified one.
      *
-     * @param percentage the {@code PercentageDTO} containing the percentage to apply (e.g., 10 for a 10% increase).
+     * @param amount the {@code Amount} instance to add to this one.
+     * @return a new {@code Amount} instance representing the result of the addition.
      */
-    public void increaseAmountByPercentage(PercentageDTO percentage) {
-        updateAmount(this.amount.multiply(toIncreaseFactor(percentage)));
+    public Amount add(Amount amount) {
+        return new Amount(this.amount.add(amount.amount));
     }
 
     /**
-     * Decreases this monetary amount by a given percentage.
+     * Returns an {@link Amount} representing the difference between this
+     * instance and the specified one.
      *
-     * @param percentage the {@code PercentageDTO} containing the percentage to subtract (e.g., 25 for a 25% decrease)
+     * @param amount the {@code Amount} instance to subtract from this one.
+     * @return a new {@code Amount} instance representing the result of the substraction.
      */
-    public void decreaseAmountByPercentage(PercentageDTO percentage) {
-        updateAmount(this.amount.multiply(toDecreaseFactor(percentage)));
+    public Amount subtract(Amount amount) {
+        return new Amount(this.amount.subtract(amount.amount));
     }
 
-    private void updateAmount(BigDecimal amount){
-        this.amount = amount;
-        formatAmount();
+    /**
+     * Returns an {@link Amount} representing this amount multiplied by the specified quantity
+     *
+     * @param quantity the quantity by which the current {@code Amount} is to be multiplied.
+     * @return a new {@code Amount} instance representing the result of the multiplication.
+     */
+    public Amount multiplyByQuantity(int quantity) {
+        return new Amount(this.amount.multiply(BigDecimal.valueOf(quantity)));
+    }
+
+    /**
+     * Increases the current monetary amount by a given percentage.
+     *
+     * @param percentage the {@code PercentageDTO} containing the percentage to add
+     *                   (e.g., 25 for a 25% increase).
+     * @return a new {@code Amount} instance representing the increased monetary value.
+     */
+    public Amount increaseBy(PercentageDTO percentage) {
+        return new Amount(this.amount.multiply(toIncreaseFactor(percentage)));
+    }
+
+    /**
+     * Reduces the current monetary amount by the given percentage.
+     *
+     * @param percentage the {@code PercentageDTO} containing the percentage to decrease
+     *                   (e.g., 25 for a 25% reduction).
+     * @return a new {@code Amount} instance representing the reduced monetary value.
+     */
+    public Amount decreaseBy(PercentageDTO percentage) {
+        return new Amount(this.amount.multiply(toDecreaseFactor(percentage)));
     }
 
     private BigDecimal toIncreaseFactor(PercentageDTO percentage) {
@@ -97,11 +136,7 @@ public class Amount {
         return BigDecimal.valueOf(1 - (double) percentage.percentage() / HUNDRED_PERCENT);
     }
 
-    /**
-     * Utility method for rounding the amount to two decimal places. Retrieved from
-     * <a href="https://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places">here<a/>.
-     */
-    private void formatAmount() {
-        amount = amount.setScale(DECIMAL_PLACES, RoundingMode.HALF_UP);
+    private BigDecimal formatAmount(BigDecimal amount) {
+        return amount.setScale(DECIMAL_PLACES, ROUNDING_MODE);
     }
 }

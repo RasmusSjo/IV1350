@@ -2,7 +2,6 @@ package main.se.kth.iv1350.rassjo.pos.model;
 
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,11 +17,9 @@ import java.util.Map;
  */
 public class Sale {
 
-	private static final int PERCENTAGE_BASE = 100;
-
 	private final LocalDateTime startTime;
-	private final Amount totalCost;
-	private final Amount totalVat;
+	private Amount totalCost;
+	private Amount totalVat;
 	private CashPayment payment;
 	private final Map<ItemIdentifierDTO, SaleItem> items;
 	private SaleItem lastAddedItem;
@@ -153,13 +150,12 @@ public class Sale {
 	}
 
 	private void updateSaleCost(SaleItem item, int addedQuantity) {
-		BigDecimal addedNetCost = item.getBaseNetPrice().amount().multiply(BigDecimal.valueOf(addedQuantity));
-		BigDecimal addedGrossCost = item.getFinalUnitPrice().getAmount().multiply(BigDecimal.valueOf(addedQuantity));
-		Amount increasedGrossAmount = new Amount(addedGrossCost);
-		Amount increasedVatAmount = new Amount(addedGrossCost.subtract(addedNetCost));
+		Amount addedNetCost = new Amount(item.getBaseNetPrice().amount()).multiplyByQuantity(addedQuantity);
+		Amount addedGrossAmount = item.getFinalUnitPrice().multiplyByQuantity(addedQuantity);
+		Amount addedVatAmount = addedGrossAmount.subtract(addedNetCost);
 
-		totalCost.increaseAmountBySum(increasedGrossAmount);
-		totalVat.increaseAmountBySum(increasedVatAmount);
+		totalCost = totalCost.add(addedGrossAmount);
+		totalVat = totalVat.add(addedVatAmount);
 	}
 
 	public void applyDiscount(DiscountDTO discount) {

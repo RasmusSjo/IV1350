@@ -6,16 +6,34 @@ import main.se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.SaleDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.SaleItemDTO;
 
-import java.math.BigDecimal;
-
+/**
+ * Is an abstraction of the application view, serving as the interface between
+ * the user and the system.
+ */
 public class View {
 
     private final SaleController saleController;
 
+    /**
+     * Creates a new {@link View} instance.
+     *
+     * @param saleController the {@code SaleController} that handles the execution
+     *                        of sale-related operations.
+     */
     public View(SaleController saleController) {
         this.saleController = saleController;
     }
 
+    /**
+     * Demonstrates a complete sale interaction sequence, showcasing the functionality of
+     * the current sale system.
+     * <p />
+     * The method performs the following steps:
+     * - Starts a new sale session.
+     * - Adds multiple items to the sale, displaying details for each addition.
+     * - Ends the sale, displaying the final total cost including VAT.
+     * - Processes a cash payment and displays the change to be returned.
+     */
     public void sampleRun() {
         saleController.startSale();
 
@@ -29,7 +47,7 @@ public class View {
 
         endSale();
 
-        pay(new AmountDTO(BigDecimal.valueOf(1000.0)));
+        pay(new AmountDTO("1000.0"));
     }
 
     private void addItem(ItemIdentifierDTO itemId, int quantity ) {
