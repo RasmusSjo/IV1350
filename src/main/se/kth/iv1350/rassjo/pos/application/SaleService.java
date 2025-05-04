@@ -54,7 +54,7 @@ public class SaleService {
      */
     public AmountDTO endSale() {
         currentSale.end();
-        return currentSale.getTotalCost();
+        return Mapper.toDTO(currentSale.getTotalCost());
     }
 
     /**
@@ -86,17 +86,17 @@ public class SaleService {
      * Processes a cash payment for the current sale, updates the system with payment details,
      * and adjusts the inventory and accounting systems accordingly.
      *
-     * @param amount an {@code AmountDTO} representing the cash amount paid by the customer.
+     * @param paidAmount an {@code AmountDTO} representing the cash amount paid by the customer.
      * @return an {@code AmountDTO} representing the change to be returned to the customer.
      */
-    public AmountDTO processCashPayment(AmountDTO amount) {
-        CashPayment payment = new CashPayment(currentSale.getTotalCost(), amount);
-        paymentService.processPayment(payment, Mapper.toDTO(currentSale));
+    public AmountDTO processCashPayment(AmountDTO paidAmount) {
+        CashPayment payment = new CashPayment(currentSale.getTotalCost(), Mapper.toDomain(paidAmount));
+        paymentService.processPayment(currentSale, payment);
         currentSale.recordPayment(payment);
 
         inventoryHandler.updateInventory(Mapper.toDTO(currentSale));
         accountingHandler.recordSale(Mapper.toDTO(currentSale));
 
-        return payment.getChange();
+        return Mapper.toDTO(payment.getChange());
     }
 }

@@ -1,8 +1,12 @@
 package main.se.kth.iv1350.rassjo.pos.integration.DTOs;
 
 import main.se.kth.iv1350.rassjo.pos.model.Amount;
+import main.se.kth.iv1350.rassjo.pos.model.CashPayment;
 import main.se.kth.iv1350.rassjo.pos.model.Sale;
 import main.se.kth.iv1350.rassjo.pos.model.SaleItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility class that provides methods for converting domain objects to their DTO.
@@ -20,18 +24,40 @@ public class Mapper {
     }
 
     /**
+     * Converts the provided {@code AmountDTO} object to an {@code Amount}.
+     *
+     * @param amount the DTO containing the monetary value to convert.
+     * @return the {@code Amount} representing the monetary value.
+     */
+    public static Amount toDomain(AmountDTO amount) {
+        return new Amount(amount.amount());
+    }
+
+    public static CashPaymentDTO toDTO(CashPayment payment){
+        return new CashPaymentDTO(
+                toDTO(payment.getTotalCost()),
+                toDTO(payment.getPaidAmount()),
+                toDTO(payment.getChange()));
+    }
+
+    /**
      * Converts the provided {@link Sale} object to a {@link SaleDTO}.
      *
      * @param sale the sale to convert
      * @return the DTO representing the sale
      */
     public static SaleDTO toDTO(Sale sale) {
+        List<SaleItemDTO> items = new ArrayList<>();
+        for (SaleItem item : sale.getItems()) {
+            items.add(toDTO(item));
+        }
+
         return new SaleDTO(
                 sale.getStartTime(),
-                sale.getTotalCost(),
-                sale.getTotalVat(),
-                sale.getItems(),
-                sale.getLastAddedItem(),
+                toDTO(sale.getTotalCost()),
+                toDTO(sale.getTotalVat()),
+                items,
+                toDTO(sale.getLastAddedItem()),
                 sale.getPayment(),
                 sale.getStatus());
     }

@@ -1,10 +1,11 @@
 package main.se.kth.iv1350.rassjo.pos.application;
 
 import main.se.kth.iv1350.rassjo.pos.integration.CashRegister;
-import main.se.kth.iv1350.rassjo.pos.integration.DTOs.SaleDTO;
+import main.se.kth.iv1350.rassjo.pos.integration.DTOs.Mapper;
 import main.se.kth.iv1350.rassjo.pos.integration.ReceiptPrinter;
 import main.se.kth.iv1350.rassjo.pos.model.CashPayment;
-import main.se.kth.iv1350.rassjo.pos.model.Receipt;
+import main.se.kth.iv1350.rassjo.pos.integration.DTOs.ReceiptDTO;
+import main.se.kth.iv1350.rassjo.pos.model.Sale;
 
 /**
  * The PaymentService class is responsible for processing and finalizing payments
@@ -33,14 +34,13 @@ public class PaymentService {
      * Processes the payment for a sale by updating the cash register,
      * generating a receipt, and printing it using the receipt printer.
      *
+     * @param sale    the {@code Sale} object providing details about the sale.
      * @param payment the {@code CashPayment} object containing information
      *                about the payment.
-     * @param saleInformation the {@code SaleDTO} object providing details
-     *                        about the sale.
      */
-    public void processPayment(CashPayment payment, SaleDTO saleInformation) {
+    public void processPayment(Sale sale, CashPayment payment) {
         cashRegister.addPayment(payment);
-        Receipt receipt = new Receipt(saleInformation, payment);
+        ReceiptDTO receipt = new ReceiptDTO(Mapper.toDTO(sale), Mapper.toDTO(payment));
         receiptPrinter.printReceipt(receipt);
     }
 }

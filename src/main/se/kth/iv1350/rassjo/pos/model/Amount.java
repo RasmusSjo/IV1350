@@ -1,6 +1,5 @@
 package main.se.kth.iv1350.rassjo.pos.model;
 
-import main.se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.PercentageDTO;
 
 import java.math.BigDecimal;
@@ -27,12 +26,12 @@ public class Amount {
     }
 
     /**
-     * Creates a new Amount from an AmountDTO.
+     * Creates a new Amount from an Amount.
      *
-     * @param amount the DTO containing the monetary value
+     * @param amount the {@code Amount} containing the monetary value
      */
-    public Amount(AmountDTO amount) {
-        this.amount = amount.amount();
+    public Amount(Amount amount) {
+        this.amount = amount.getAmount();
         formatAmount();
     }
 
@@ -56,30 +55,12 @@ public class Amount {
     }
 
     /**
-     * Increases this monetary amount by the value of the given amount.
-     *
-     * @param amount the {@code AmountDTO} representing the monetary value to add.
-     */
-    public void increaseAmountBySum(AmountDTO amount) {
-        updateAmount(this.amount + amount.amount());
-    }
-
-    /**
      * Decreases this monetary amount by the value of the given amount.
      *
      * @param amount the {@code Amount} representing the monetary value to subtract
      */
     public void decreaseAmountBySum(Amount amount) {
         updateAmount(this.amount - amount.getAmount());
-    }
-
-    /**
-     * Decreases this monetary amount by the value of the given amount.
-     *
-     * @param amount the {@code AmountDTO} representing the monetary value to subtract.
-     */
-    public void decreaseAmountBySum(AmountDTO amount) {
-        updateAmount(this.amount - amount.amount());
     }
 
     /**
@@ -98,19 +79,6 @@ public class Amount {
      */
     public void decreaseAmountByPercentage(PercentageDTO percentage) {
         updateAmount(this.amount * (1 - (double) percentage.percentage() / HUNDRED_PERCENT));
-    }
-
-    /**
-     * Converts the monetary amount into a string representation, separating the integer
-     * and decimal parts with a colon. Ensures that the decimal part always contains two
-     * digits by appending a zero if necessary.
-     *
-     * @return a string representation of the amount in the format "integerPart:decimalPart".
-     */
-    @Override
-    public String toString() {
-        AmountDTO amountForString = new AmountDTO(this.amount);
-        return amountForString.toString();
     }
 
     private void updateAmount(double amount){

@@ -55,20 +55,20 @@ public class Sale {
 	/**
 	 * Retrieves the total cost of the sale. This value includes VAT and any applied discounts.
 	 *
-	 * @return an {@code AmountDTO} representing the total cost of the sale.
+	 * @return an {@code Amount} representing the total cost of the sale.
 	 */
-	public AmountDTO getTotalCost() {
-		return Mapper.toDTO(totalCost);
+	public Amount getTotalCost() {
+		return totalCost;
 	}
 
 	/**
 	 * Retrieves the total VAT for the sale. The returned value represents the total
 	 * calculated VAT amount for all items after discounts.
 	 *
-	 * @return an {@code AmountDTO} representing the total VAT for the sale.
+	 * @return an {@code Amount} representing the total VAT for the sale.
 	 */
-	public AmountDTO getTotalVat() {
-		return Mapper.toDTO(totalVat);
+	public Amount getTotalVat() {
+		return totalVat;
 	}
 
 	/**
@@ -82,28 +82,22 @@ public class Sale {
 	}
 
 	/**
-	 * Retrieves a list of all items in the sale, represented as {@code SaleItemDTO}.
-	 * Each {@code SaleItemDTO} includes details such as the item's identifier, name,
-	 * description, price, VAT rate, and quantity purchased.
+	 * Retrieves a list of all {@link SaleItem} in the sale.
 	 *
-	 * @return a {@code List<SaleItemDTO>} containing all items in the sale.
+	 * @return a list of {@code SaleItem} containing all items in the sale.
 	 */
-	public List<SaleItemDTO> getItems() {
-		List<SaleItemDTO> saleItems = new ArrayList<>();
-		for (SaleItem item : items.values()) {
-			saleItems.add(Mapper.toDTO(item));
-		}
-		return saleItems;
+	public List<SaleItem> getItems() {
+        return new ArrayList<>(items.values());
 	}
 
 	/**
 	 * Retrieves the last item added to the current sale.
 	 *
-	 * @return a {@code SaleItemDTO} representing the last item added to the sale,
+	 * @return a {@code SaleItem} representing the last item added to the sale,
 	 *         or {@code null} if no items have been added.
 	 */
-	public SaleItemDTO getLastAddedItem() {
-		return Mapper.toDTO(lastAddedItem);
+	public SaleItem getLastAddedItem() {
+		return lastAddedItem;
 	}
 
 	/**
