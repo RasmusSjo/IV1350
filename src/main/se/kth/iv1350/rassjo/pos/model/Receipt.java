@@ -42,7 +42,7 @@ public class Receipt {
         // Items
         for (SaleItemDTO item : saleInformation.items()) {
             Amount totalItemCost = new Amount(item.quantity() * item.finalPrice().amount());
-            String quantityAndPrice = item.quantity() + " x " + item.netPrice();
+            String quantityAndPrice = item.quantity() + " x " + item.finalPrice();
             sb.append(String.format(ITEM_LINE_FORMAT, item.name(), quantityAndPrice, totalItemCost + " SEK"));
         }
         sb.append("\n");
