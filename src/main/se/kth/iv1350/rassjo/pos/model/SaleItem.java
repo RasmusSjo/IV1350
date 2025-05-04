@@ -28,8 +28,8 @@ public class SaleItem {
      */
     public SaleItem(ItemDTO itemInformation, int quantity) {
         this.itemInformation = itemInformation;
-        finalPrice = new Amount(itemInformation.netPrice().amount());
         finalPrice.increaseAmountByPercentage(itemInformation.vatRate());
+        finalPrice = new Amount(itemInformation.baseNetPrice().amount());
         this.quantity = quantity;
     }
 
@@ -61,12 +61,12 @@ public class SaleItem {
     }
 
     /**
-     * Retrieves the net price of this sale item.
+     * Retrieves the base net price of this sale item.
      *
      * @return an AmountDTO object representing the net price of the item.
      */
-    public AmountDTO getNetPrice() {
-        return itemInformation.netPrice();
+    public AmountDTO getBaseNetPrice() {
+        return itemInformation.baseNetPrice();
     }
 
     /**

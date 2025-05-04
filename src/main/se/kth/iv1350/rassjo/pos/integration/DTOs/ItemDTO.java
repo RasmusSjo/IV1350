@@ -9,9 +9,9 @@ package main.se.kth.iv1350.rassjo.pos.integration.DTOs;
  * @param itemId      the unique identifier of the item in the inventory system.
  * @param name        the name of the item.
  * @param description a brief description of the item.
- * @param netPrice    the price per unit before VAT.
+ * @param baseNetPrice    the price per unit before VAT.
  * @param vatRate     the VAT percentage applied to the item.
  */
-public record ItemDTO(ItemIdentifierDTO itemId, String name, String description, AmountDTO netPrice,
+public record ItemDTO(ItemIdentifierDTO itemId, String name, String description, AmountDTO baseNetPrice,
                       PercentageDTO vatRate) {
 }

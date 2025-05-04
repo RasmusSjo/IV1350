@@ -46,7 +46,7 @@ public class Mapper {
         return new SaleItemDTO(
                 item.getId(),
                 item.getName(),item.getDescription(),
-                item.getNetPrice(),
+                item.getBaseNetPrice(),
                 item.getVatRate(),
                 toDTO(item.getFinalPrice()),
                 item.getQuantity());

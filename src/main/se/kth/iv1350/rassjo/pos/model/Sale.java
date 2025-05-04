@@ -160,7 +160,7 @@ public class Sale {
 	private void updateSaleCost(SaleItem item, int addedQuantity) {
 		double addedItemCost = item.getFinalPrice().getAmount() * addedQuantity;
 		Amount increasedAmount = new Amount(addedItemCost);
-		Amount vatAmount = new Amount(addedItemCost - item.getNetPrice().amount() * addedQuantity);
+		Amount vatAmount = new Amount(addedItemCost - item.getBaseNetPrice().amount() * addedQuantity);
 
 		totalCost.increaseAmountBySum(increasedAmount);
 		totalVat.increaseAmountBySum(vatAmount);
