@@ -40,10 +40,9 @@ public class Receipt {
         sb.append("Time of Sale: ").append(saleInformation.startTime().format(TIME_FORMAT)).append("\n\n");
 
         // Items
-        for (SaleItemDTO item : saleInformation.items()) {
-            Amount totalItemCost = new Amount(item.quantity() * item.finalPrice().amount());
-            String quantityAndPrice = item.quantity() + " x " + item.finalPrice();
-            sb.append(String.format(ITEM_LINE_FORMAT, item.name(), quantityAndPrice, totalItemCost + " SEK"));
+        for (SaleItemDTO item : sale.items()) {
+            String quantityAndPrice = item.quantity() + " x " + item.finalUnitPrice();
+            sb.append(String.format(ITEM_LINE_FORMAT, item.name(), quantityAndPrice, item.finalTotalPrice() + " SEK"));
         }
         sb.append("\n");
 

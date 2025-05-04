@@ -14,7 +14,8 @@ import main.se.kth.iv1350.rassjo.pos.integration.DTOs.PercentageDTO;
 public class SaleItem {
 
     private final ItemDTO itemInformation;
-    private final Amount finalPrice;
+    private final Amount finalUnitPrice;
+    private final Amount finalTotalPrice;
     private int quantity;
 
     /**
@@ -28,8 +29,9 @@ public class SaleItem {
      */
     public SaleItem(ItemDTO itemInformation, int quantity) {
         this.itemInformation = itemInformation;
-        finalPrice.increaseAmountByPercentage(itemInformation.vatRate());
-        finalPrice = new Amount(itemInformation.baseNetPrice().amount());
+        finalUnitPrice = new Amount(itemInformation.baseNetPrice().amount());
+        finalUnitPrice.increaseAmountByPercentage(itemInformation.vatRate());
+        finalTotalPrice = new Amount(finalUnitPrice.getAmount() * quantity);
         this.quantity = quantity;
     }
 
@@ -84,8 +86,18 @@ public class SaleItem {
      *
      * @return an Amount object representing the final price of the item.
      */
-    public Amount getFinalPrice() {
-        return finalPrice;
+    public Amount getFinalUnitPrice() {
+        return finalUnitPrice;
+    }
+
+    /**
+     * Retrieves the final total price of this sale item. The final total price is
+     * calculated as the product of the final unit price and the quantity of the item.
+     *
+     * @return an {@code Amount} representing the final total price of this sale item.
+     */
+    public Amount getFinalTotalPrice() {
+        return finalTotalPrice;
     }
 
     /**
@@ -104,5 +116,6 @@ public class SaleItem {
      */
     public void increaseQuantity(int quantity) {
         this.quantity += quantity;
+        finalTotalPrice.increaseAmountBySum(new Amount(finalUnitPrice.getAmount() * quantity));
     }
 }

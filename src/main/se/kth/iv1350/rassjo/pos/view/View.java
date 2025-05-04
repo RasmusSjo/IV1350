@@ -38,7 +38,7 @@ public class View {
 
         System.out.println("Item ID: " + itemId.id());
         System.out.println("Item name: " + lastAddedItem.name());
-        System.out.println("Item cost (incl. VAT): " + lastAddedItem.finalPrice().toString() + " SEK");
+        System.out.println("Item cost (incl. VAT): " + lastAddedItem.finalUnitPrice().toString() + " SEK");
         System.out.println("VAT: " + lastAddedItem.vatRate().percentage() + "%");
         System.out.println("Item description: " + lastAddedItem.description());
 

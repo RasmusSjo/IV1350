@@ -48,7 +48,8 @@ public class Mapper {
                 item.getName(),item.getDescription(),
                 item.getBaseNetPrice(),
                 item.getVatRate(),
-                toDTO(item.getFinalPrice()),
+                toDTO(item.getFinalUnitPrice()),
+                toDTO(item.getFinalTotalPrice()),
                 item.getQuantity());
     }
 }
