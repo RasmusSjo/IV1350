@@ -23,6 +23,8 @@ public class View {
 
         addItem(new ItemIdentifierDTO(10009), 1);
 
+        addItem(new ItemIdentifierDTO(10004), 4);
+
         endSale();
 
         pay(new AmountDTO(1000));
@@ -51,7 +53,7 @@ public class View {
     }
 
     private void pay(AmountDTO amountDTO) {
-        AmountDTO change = saleController.processCashPayment(new AmountDTO(100));
+        AmountDTO change = saleController.processCashPayment(amountDTO);
         System.out.println("Change to give the customer: " + change.toString() + " SEK");
     }
 }
