@@ -50,6 +50,6 @@ public class CashPayment {
     }
 
     private Amount calculateChange() {
-        return new Amount(paidAmount.getAmount() - totalCost.getAmount());
+        return new Amount(paidAmount.getAmount().subtract(totalCost.getAmount()));
     }
 }

@@ -5,6 +5,8 @@ import main.se.kth.iv1350.rassjo.pos.integration.DTOs.ItemDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.PercentageDTO;
 
+import java.math.BigDecimal;
+
 /**
  * Represents an item within a sale. Contains information about the purchased item,
  *  its final price in the sale (including VAT and potential discounts), as
@@ -31,7 +33,7 @@ public class SaleItem {
         this.itemInformation = itemInformation;
         finalUnitPrice = new Amount(itemInformation.baseNetPrice().amount());
         finalUnitPrice.increaseAmountByPercentage(itemInformation.vatRate());
-        finalTotalPrice = new Amount(finalUnitPrice.getAmount() * quantity);
+        finalTotalPrice = new Amount(finalUnitPrice.getAmount().multiply(BigDecimal.valueOf(quantity)));
         this.quantity = quantity;
     }
 
@@ -116,6 +118,6 @@ public class SaleItem {
      */
     public void increaseQuantity(int quantity) {
         this.quantity += quantity;
-        finalTotalPrice.increaseAmountBySum(new Amount(finalUnitPrice.getAmount() * quantity));
+        finalTotalPrice.increaseAmountBySum(new Amount(finalUnitPrice.getAmount().multiply(BigDecimal.valueOf(quantity))));
     }
 }

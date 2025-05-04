@@ -6,6 +6,8 @@ import main.se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.SaleDTO;
 import main.se.kth.iv1350.rassjo.pos.integration.DTOs.SaleItemDTO;
 
+import java.math.BigDecimal;
+
 public class View {
 
     private final SaleController saleController;
@@ -27,7 +29,7 @@ public class View {
 
         endSale();
 
-        pay(new AmountDTO(1000));
+        pay(new AmountDTO(BigDecimal.valueOf(1000.0)));
     }
 
     private void addItem(ItemIdentifierDTO itemId, int quantity ) {

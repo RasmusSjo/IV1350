@@ -3,6 +3,8 @@ package main.se.kth.iv1350.rassjo.pos.integration;
 import main.se.kth.iv1350.rassjo.pos.model.Amount;
 import main.se.kth.iv1350.rassjo.pos.model.CashPayment;
 
+import java.math.BigDecimal;
+
 /**
  * Represents a cash register used to track transactions
  * and maintain a running balance. It allows adding payments
@@ -10,7 +12,7 @@ import main.se.kth.iv1350.rassjo.pos.model.CashPayment;
  */
 public class CashRegister {
 
-    private static final double STARTUP_BALANCE = 1000;
+    private static final Amount STARTUP_BALANCE = new Amount(BigDecimal.valueOf(1000.0));
     private final Amount currentBalance;
 
     /**
