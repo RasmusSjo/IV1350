@@ -6,6 +6,7 @@ import se.kth.iv1350.rassjo.pos.integration.DTOs.CustomerIdentifierDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.SaleDTO;
 import se.kth.iv1350.rassjo.pos.integration.HandlerFactory;
+import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
 
 /**
  * The SaleController class serves as the primary interface between the view
@@ -49,7 +50,7 @@ public class SaleController {
      * @param itemId the identifier of the item to be added to the sale.
      * @return a {@code SaleDTO} representing the updated state of the sale after the item is added.
      */
-    public SaleDTO addItem(ItemIdentifierDTO itemId) {
+    public SaleDTO addItem(ItemIdentifierDTO itemId) throws ItemNotFoundException {
         return saleService.addItem(itemId, 1);
     }
 
@@ -60,7 +61,7 @@ public class SaleController {
      * @param quantity the quantity of the item to be added to the sale.
      * @return a {@code SaleDTO} representing the updated state of the sale after adding the item.
      */
-    public SaleDTO addItem(ItemIdentifierDTO itemId, int quantity) {
+    public SaleDTO addItem(ItemIdentifierDTO itemId, int quantity) throws ItemNotFoundException {
         return saleService.addItem(itemId, quantity);
     }
 

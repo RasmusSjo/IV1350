@@ -5,6 +5,7 @@ import se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.SaleDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.SaleItemDTO;
+import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
 
 /**
  * Is an abstraction of the application view, serving as the interface between
@@ -37,7 +38,7 @@ public class View {
     public void sampleRun() {
         saleController.startSale();
 
-        addItem(new ItemIdentifierDTO(10001), 1);
+        addItem(new ItemIdentifierDTO(10101), 1);
 
         addItem(new ItemIdentifierDTO(10004), 3);
 
@@ -53,17 +54,23 @@ public class View {
     private void addItem(ItemIdentifierDTO itemId, int quantity ) {
         System.out.println("Add " + quantity + " item with id " + itemId.id() + ":");
 
-        SaleDTO sale = saleController.addItem(itemId, quantity);
-        SaleItemDTO lastAddedItem = sale.lastAddedItem();
+        try {
+            SaleDTO sale = saleController.addItem(itemId, quantity);
+            SaleItemDTO lastAddedItem = sale.lastAddedItem();
 
-        System.out.println("Item ID: " + itemId.id());
-        System.out.println("Item name: " + lastAddedItem.name());
-        System.out.println("Item cost (incl. VAT): " + lastAddedItem.finalUnitPrice().toString() + " SEK");
-        System.out.println("VAT: " + lastAddedItem.vatRate().percentage() + "%");
-        System.out.println("Item description: " + lastAddedItem.description());
+            System.out.println("Item ID: " + itemId.id());
+            System.out.println("Item name: " + lastAddedItem.name());
+            System.out.println("Item cost (incl. VAT): " + lastAddedItem.finalUnitPrice().toString() + " SEK");
+            System.out.println("VAT: " + lastAddedItem.vatRate().percentage() + "%");
+            System.out.println("Item description: " + lastAddedItem.description());
 
-        System.out.println("Total cost (incl. VAT): " + sale.totalCost().toString() + " SEK");
-        System.out.println("Total VAT: " + sale.totalVat().toString() + " SEK\n");
+            System.out.println("Total cost (incl. VAT): " + sale.totalCost().toString() + " SEK");
+            System.out.println("Total VAT: " + sale.totalVat().toString() + " SEK\n");
+        } catch (ItemNotFoundException e) {
+            System.out.println("No item with ID " + itemId.id() + " was found.\n");
+        } catch (Exception e) {
+            System.out.println("An error occurred trying to add the item.");
+        }
     }
 
     private void endSale() {

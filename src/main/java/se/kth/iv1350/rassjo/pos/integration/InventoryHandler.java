@@ -1,6 +1,7 @@
 package se.kth.iv1350.rassjo.pos.integration;
 
 import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
+import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,14 +23,18 @@ public class InventoryHandler {
     }
 
     /**
-     * Retrieves information about a specific item from the inventory system.
+     * Retrieves detailed information about an item from the inventory system based on its identifier.
      *
-     * @param itemId the {@code ItemIdentifierDTO} object representing the unique identifier of the item.
-     * @return an {@code ItemDTO} containing the item's details such as name, description,
-     *         net price before VAT, and VAT rate, or {@code null} if the item is not found in the inventory.
+     * @param itemId The {@link ItemIdentifierDTO} of the item for which information is requested.
+     * @return An {@link ItemDTO} object containing the item's details, such as name, description,
+     *         base price, and VAT rate.
+     * @throws ItemNotFoundException if the item with the specified identifier is not found in the inventory.
      */
-    public ItemDTO getItemInformation(ItemIdentifierDTO itemId) {
-        return inventory.get(itemId);
+    public ItemDTO getItemInformation(ItemIdentifierDTO itemId) throws ItemNotFoundException {
+        if (inventory.containsKey(itemId)) {
+            return inventory.get(itemId);
+        }
+        throw new ItemNotFoundException("Item not found in inventory");
     }
 
     /**
@@ -39,7 +44,6 @@ public class InventoryHandler {
      *                        information about the sale.
      */
     public void updateInventory(SaleDTO saleInformation) {
-
     }
 
     private void loadMockData() {

@@ -5,6 +5,7 @@ import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import se.kth.iv1350.rassjo.pos.integration.DiscountHandler;
 import se.kth.iv1350.rassjo.pos.integration.HandlerFactory;
 import se.kth.iv1350.rassjo.pos.integration.InventoryHandler;
+import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
 import se.kth.iv1350.rassjo.pos.model.CashPayment;
 import se.kth.iv1350.rassjo.pos.model.Sale;
 
@@ -69,8 +70,9 @@ public class SaleService {
      * @param itemId   the identifier of the item that will be added to the sale.
      * @param quantity the quantity of the item that is being added.
      * @return a {@code SaleDTO} representing the current state of the sale after adding the item.
+     * @throws ItemNotFoundException if the item with the specified identifier doesn't exist.
      */
-    public SaleDTO addItem(ItemIdentifierDTO itemId, int quantity) {
+    public SaleDTO addItem(ItemIdentifierDTO itemId, int quantity) throws ItemNotFoundException {
         if (currentSale.containsItemWithId(itemId)) {
             currentSale.increaseItemWithId(itemId, quantity);
             return Mapper.toDTO(currentSale);
