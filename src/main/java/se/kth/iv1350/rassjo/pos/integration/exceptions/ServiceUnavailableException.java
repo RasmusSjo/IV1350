@@ -3,7 +3,7 @@ package se.kth.iv1350.rassjo.pos.integration.exceptions;
 /**
  * Represents an exception thrown when an external system service is unavailable.
  */
-public class ServiceUnavailableException extends Exception {
+public class ServiceUnavailableException extends RuntimeException {
 
     /**
      * Creates an instance of {@code ServiceUnavailableException} with a specified detail message
