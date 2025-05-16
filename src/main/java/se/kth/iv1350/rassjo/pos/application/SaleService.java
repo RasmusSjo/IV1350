@@ -1,11 +1,13 @@
 package se.kth.iv1350.rassjo.pos.application;
 
+import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
 import se.kth.iv1350.rassjo.pos.integration.AccountingHandler;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import se.kth.iv1350.rassjo.pos.integration.DiscountHandler;
 import se.kth.iv1350.rassjo.pos.integration.HandlerFactory;
 import se.kth.iv1350.rassjo.pos.integration.InventoryHandler;
 import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
+import se.kth.iv1350.rassjo.pos.integration.exceptions.ServiceUnavailableException;
 import se.kth.iv1350.rassjo.pos.model.CashPayment;
 import se.kth.iv1350.rassjo.pos.model.Sale;
 
@@ -84,9 +86,26 @@ public class SaleService {
         return Mapper.toDTO(currentSale);
     }
 
-    public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) {
-        // This method will not be implemented
-        return null;
+    /**
+     * Applies a discount to the current sale based on the provided customer's information and the
+     * current sale. If a discount is successfully applied, the total cost of the sale is updated and returned.
+     *
+     * @param customerId the identifier of the customer for whom the discount is being sought.
+     * @return an {@link AmountDTO} representing the total cost of the sale after applying the discount.
+     * @throws OperationFailedException if the discount service is unavailable and the discount cannot be applied.
+     */
+    public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) throws OperationFailedException {
+        try {
+            DiscountRequestDTO discountRequest = new DiscountRequestDTO(
+                    customerId,
+                    Mapper.toDTO(currentSale.getTotalCost()),
+                    Mapper.toDTO(currentSale.getItems()));
+            DiscountDTO discount = discountHandler.getDiscount(discountRequest);
+            currentSale.applyDiscount(discount);
+            return Mapper.toDTO(currentSale.getTotalCost());
+        } catch (ServiceUnavailableException e) {
+            throw new OperationFailedException("Could not apply discount at this time. Try again later.", e);
+        }
     }
 
     /**

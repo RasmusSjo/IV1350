@@ -168,8 +168,13 @@ public class Sale {
 		totalVat = totalVat.add(addedVatAmount);
 	}
 
+	/**
+	 * Applies a discount to the current sale given the specified discount details.
+	 *
+	 * @param discount the {@link DiscountDTO} object containing information about the discount to be applied.
+	 */
 	public void applyDiscount(DiscountDTO discount) {
-		// This method is not being implemented
+		// This method is not being implemented since discounts will never be applied
 	}
 
 	/**
