@@ -1,6 +1,7 @@
 package se.kth.iv1350.rassjo.pos.controller;
 
 import se.kth.iv1350.rassjo.pos.application.SaleService;
+import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.CustomerIdentifierDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
@@ -65,9 +66,16 @@ public class SaleController {
         return saleService.addItem(itemId, quantity);
     }
 
-    public AmountDTO requestDiscount(CustomerIdentifierDTO customerId) {
-        // This method will not be implemented
-        return null;
+    /**
+     * Requests a discount for the current sale based on the provided customer identifier and current sale.
+     * Delegates the process to the business logic to calculate and apply the appropriate discount.
+     *
+     * @param customerId the identifier of the customer for whom the discount is requested.
+     * @return an {@link AmountDTO} representing the total cost of the sale after applying the discount.
+     * @throws OperationFailedException if the discount cannot be applied due to a system failure.
+     */
+    public AmountDTO requestDiscount(CustomerIdentifierDTO customerId) throws OperationFailedException {
+        return saleService.applyDiscount(customerId);
     }
 
     /**

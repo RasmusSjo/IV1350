@@ -1,10 +1,8 @@
 package se.kth.iv1350.rassjo.pos.view;
 
+import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
 import se.kth.iv1350.rassjo.pos.controller.SaleController;
-import se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
-import se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
-import se.kth.iv1350.rassjo.pos.integration.DTOs.SaleDTO;
-import se.kth.iv1350.rassjo.pos.integration.DTOs.SaleItemDTO;
+import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
 
 /**
@@ -48,6 +46,8 @@ public class View {
 
         endSale();
 
+        requestDiscount(1);
+
         pay(new AmountDTO("1000.0"));
     }
 
@@ -69,7 +69,7 @@ public class View {
         } catch (ItemNotFoundException e) {
             System.out.println("No item with ID " + itemId.id() + " was found.\n");
         } catch (Exception e) {
-            System.out.println("An error occurred trying to add the item.");
+            System.out.println("An unknown error occurred trying to add the item.");
         }
     }
 
@@ -77,6 +77,18 @@ public class View {
         System.out.println("End sale:");
         AmountDTO totalCost = saleController.endSale();
         System.out.println("Total cost (incl. VAT): " + totalCost.toString() + " SEK\n");
+    }
+
+    private void requestDiscount(int customerId) {
+        System.out.println("Requesting discount for customer with id " + customerId + ":");
+        try {
+            AmountDTO totalCost = saleController.requestDiscount(new CustomerIdentifierDTO(customerId));
+            System.out.println("Total cost (incl. VAT): " + totalCost.toString() + " SEK\n");
+        } catch (OperationFailedException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An unknown error occurred trying to request the discount. Please try again later.\n");
+        }
     }
 
     private void pay(AmountDTO amountDTO) {
