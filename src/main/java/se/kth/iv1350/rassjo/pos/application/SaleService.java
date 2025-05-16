@@ -10,6 +10,7 @@ import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
 import se.kth.iv1350.rassjo.pos.integration.exceptions.ServiceUnavailableException;
 import se.kth.iv1350.rassjo.pos.model.CashPayment;
 import se.kth.iv1350.rassjo.pos.model.Sale;
+import se.kth.iv1350.rassjo.pos.utils.logging.FileLogger;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class SaleService {
     private final InventoryHandler inventoryHandler;
     private final AccountingHandler accountingHandler;
     private final DiscountHandler discountHandler;
+    private final FileLogger logger;
     private Sale currentSale;
 
     /**
@@ -39,6 +41,7 @@ public class SaleService {
         inventoryHandler = handlerFactory.getInventoryHandler();
         accountingHandler = handlerFactory.getAccountingHandler();
         discountHandler = handlerFactory.getDiscountHandler();
+        logger = FileLogger.getInstance();
         currentSale = null;
     }
 
@@ -104,6 +107,7 @@ public class SaleService {
             currentSale.applyDiscount(discount);
             return Mapper.toDTO(currentSale.getTotalCost());
         } catch (ServiceUnavailableException e) {
+            logger.error("Discount service is unavailable.", e);
             throw new OperationFailedException("Could not apply discount at this time. Try again later.", e);
         }
     }

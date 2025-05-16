@@ -4,6 +4,7 @@ import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
 import se.kth.iv1350.rassjo.pos.controller.SaleController;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
+import se.kth.iv1350.rassjo.pos.utils.logging.FileLogger;
 
 /**
  * Is an abstraction of the application view, serving as the interface between
@@ -12,6 +13,7 @@ import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
 public class View {
 
     private final SaleController saleController;
+    private final FileLogger logger;
 
     /**
      * Creates a new {@link View} instance.
@@ -21,17 +23,20 @@ public class View {
      */
     public View(SaleController saleController) {
         this.saleController = saleController;
+        this.logger = FileLogger.getInstance();
     }
 
     /**
      * Demonstrates a complete sale interaction sequence, showcasing the functionality of
      * the current sale system.
-     * <p />
+     * </p>
      * The method performs the following steps:
-     * - Starts a new sale session.
-     * - Adds multiple items to the sale, displaying details for each addition.
-     * - Ends the sale, displaying the final total cost including VAT.
-     * - Processes a cash payment and displays the change to be returned.
+     * <ul>
+     *     <li>Starts a new sale session.</li>
+     *     <li>Adds multiple items to the sale, displaying details for each addition.</li>
+     *     <li>Ends the sale, displaying the final total cost including VAT.</li>
+     *     <li>Processes a cash payment and displays the change to be returned.</li>
+     * </ul>
      */
     public void sampleRun() {
         saleController.startSale();
@@ -67,6 +72,7 @@ public class View {
             System.out.println("Total cost (incl. VAT): " + sale.totalCost().toString() + " SEK");
             System.out.println("Total VAT: " + sale.totalVat().toString() + " SEK\n");
         } catch (ItemNotFoundException e) {
+            logger.warn("Item with ID " + itemId.id() + " was not found.");
             System.out.println("No item with ID " + itemId.id() + " was found.\n");
         } catch (Exception e) {
             System.out.println("An unknown error occurred trying to add the item.");
