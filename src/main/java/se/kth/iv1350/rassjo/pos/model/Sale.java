@@ -225,13 +225,22 @@ public class Sale {
 	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#AWAITING_PAYMENT}.
 	 */
 	public void recordPayment(CashPayment payment) {
-		if (status != SaleStatus.AWAITING_PAYMENT) {
-			String errorMsg = "You can't record a payment for the sale when its status is " + status.toString() + ".";
-			throw new ExecutionOrderException(errorMsg, status, SaleStatus.AWAITING_PAYMENT);
-		}
-
+		ensureAwaitingPayment();
 		this.payment = payment;
 		status = SaleStatus.PAID;
+	}
+
+	/**
+	 * Ensures that the status of the sale is {@link SaleStatus#AWAITING_PAYMENT}.
+	 *
+	 * @throws ExecutionOrderException if the current sale status is not
+	 * {@link SaleStatus#AWAITING_PAYMENT}.
+	 */
+	public void ensureAwaitingPayment() {
+		if (status != SaleStatus.AWAITING_PAYMENT) {
+			String errorMsg = "The sale status must be " + SaleStatus.AWAITING_PAYMENT +  " in order to perform this operation. Current status is " + status.toString() + ".";
+			throw new ExecutionOrderException(errorMsg, status, SaleStatus.AWAITING_PAYMENT);
+		}
 	}
 
 	/**
