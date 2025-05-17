@@ -185,6 +185,15 @@ public class Sale {
 		status = SaleStatus.AWAITING_PAYMENT;
 	}
 
+
+	/**
+	 * Cancels the current sale by setting its status to {@code CANCELLED}.
+	 * This operation marks the sale as terminated and can only be set before the sale has been paid.
+	 */
+	public void cancel() {
+		status = SaleStatus.CANCELLED;
+	}
+
 	/**
 	 * Records a payment for the current sale. Updates the sale's status to {@code PAID}
 	 * and stores the provided payment details.

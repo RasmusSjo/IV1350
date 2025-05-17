@@ -36,5 +36,15 @@ public enum SaleStatus {
      *     </li>
      * </ul>
      */
-    PAID
+    PAID,
+    /**
+     * Indicates that the sale has been cancelled.
+     * <p>
+     * <ul>
+     *     <li>
+     *         This status represents a state where the sale has been terminated before being paid.
+     *     </li>
+     * </ul>
+     */
+    CANCELLED
 }

@@ -10,6 +10,7 @@ import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
 import se.kth.iv1350.rassjo.pos.integration.exceptions.ServiceUnavailableException;
 import se.kth.iv1350.rassjo.pos.model.CashPayment;
 import se.kth.iv1350.rassjo.pos.model.Sale;
+import se.kth.iv1350.rassjo.pos.model.SaleStatus;
 import se.kth.iv1350.rassjo.pos.utils.logging.FileLogger;
 
 import java.time.LocalDateTime;
@@ -66,6 +67,17 @@ public class SaleService {
     public AmountDTO endSale() {
         currentSale.end();
         return Mapper.toDTO(currentSale.getTotalCost());
+    }
+
+
+    /**
+     * Cancel the current sale.
+     * </p>
+     * Marks the current sale as {@link SaleStatus#CANCELLED} and then removes the reference to it.
+     */
+    public void cancelSale() {
+        currentSale.cancel();
+        currentSale = null;
     }
 
     /**

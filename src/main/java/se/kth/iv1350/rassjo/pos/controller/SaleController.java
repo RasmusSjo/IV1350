@@ -46,6 +46,13 @@ public class SaleController {
     }
 
     /**
+     * Cancels the current sale session.
+     */
+    public void cancelSale() {
+        saleService.cancelSale();
+    }
+
+    /**
      * Adds one unit of the item with the specified identifier to the current sale.
      *
      * @param itemId the identifier of the item to be added to the sale.
