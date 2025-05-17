@@ -1,6 +1,7 @@
 package se.kth.iv1350.rassjo.pos.model;
 
 import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
+import se.kth.iv1350.rassjo.pos.model.exceptions.ExecutionOrderException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -133,9 +134,15 @@ public class Sale {
 	 * The item is identified using its identifier.
 	 *
 	 * @param itemId  the {@code ItemIdentifierDTO} of the item whose quantity will be increased.
-	 * @param quantity the amount by which the item's quantity should be increased.
+	 * @param quantity the quantity by which the item's current quantity should be increased.
+	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#REGISTERING}.
 	 */
 	public void increaseItemWithId(ItemIdentifierDTO itemId, int quantity) {
+		if (status != SaleStatus.REGISTERING) {
+			String errorMsg = "You can't increase the quantity of an item when the sale's status is " + status.toString() + ".";
+			throw new ExecutionOrderException(errorMsg, status, SaleStatus.REGISTERING);
+		}
+
 		items.get(itemId).increaseQuantity(quantity);
 
 		updateSaleCost(items.get(itemId), quantity);
@@ -144,14 +151,18 @@ public class Sale {
 
 	/**
 	 * Adds an item to the current sale along with its specified quantity.
-	 * If the item is already in the sale, its unique identifier is used to manage it.
-	 * The sale cost is updated to reflect the inclusion of the new item and quantity.
 	 *
-	 * @param itemInformation the static information of the item being added,
-	 *                        including its identifier, name, description, net price, and VAT rate.
-	 * @param quantity        the number of units of the item being added to the sale.
+	 * @param itemInformation the information of the item being added, including its
+	 *                        identifier, name, description, net price, and VAT rate.
+	 * @param quantity        the quantity of the item being added to the sale.
+	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#REGISTERING}.
 	 */
 	public void addItem(ItemDTO itemInformation, int quantity) {
+		if (status != SaleStatus.REGISTERING) {
+			String errorMsg = "You can't add items to the sale when it status is " + status.toString() + ".";
+			throw new ExecutionOrderException(errorMsg, status, SaleStatus.REGISTERING);
+		}
+
 		SaleItem item = new SaleItem(itemInformation, quantity);
 		items.put(item.getId(), item);
 		lastAddedItem = item;
@@ -178,29 +189,47 @@ public class Sale {
 	}
 
 	/**
-	 * Marks the end of the sale. Updates the sale's status to {@code AWAITING_PAYMENT},
+	 * Marks the end of the sale. Updates the sale's status to {@link SaleStatus#AWAITING_PAYMENT},
 	 * indicating that all items have been registered, and the sale is now awaiting payment.
+	 *
+	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#REGISTERING}.
 	 */
 	public void end() {
+		if (status != SaleStatus.REGISTERING) {
+			String errorMsg = "You can't end the sale when it status is " + status.toString() + ".";
+			throw new ExecutionOrderException(errorMsg, status, SaleStatus.REGISTERING);
+		}
 		status = SaleStatus.AWAITING_PAYMENT;
 	}
 
 
 	/**
-	 * Cancels the current sale by setting its status to {@code CANCELLED}.
+	 * Cancels the current sale by setting its status to {@link SaleStatus#CANCELLED}.
 	 * This operation marks the sale as terminated and can only be set before the sale has been paid.
+	 *
+	 * @throws ExecutionOrderException if the sale's current status either {@link SaleStatus#PAID} or {@link SaleStatus#CANCELLED}.
 	 */
 	public void cancel() {
+		if (status == SaleStatus.PAID || status == SaleStatus.CANCELLED) {
+			String errorMsg = "You can't cancel the sale when it has already been " + (status == SaleStatus.PAID ? "paid" : "cancelled") + ".";
+			throw new ExecutionOrderException(errorMsg, status, SaleStatus.CANCELLED);
+		}
 		status = SaleStatus.CANCELLED;
 	}
 
 	/**
-	 * Records a payment for the current sale. Updates the sale's status to {@code PAID}
+	 * Record a payment for the current sale. Updates the sale's status to {@link SaleStatus#PAID}
 	 * and stores the provided payment details.
 	 *
-	 * @param payment the {@code CashPayment} object containing details of the completed payment.
+	 * @param payment the {@link CashPayment} object containing details of the completed payment.
+	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#AWAITING_PAYMENT}.
 	 */
 	public void recordPayment(CashPayment payment) {
+		if (status != SaleStatus.AWAITING_PAYMENT) {
+			String errorMsg = "You can't record a payment for the sale when its status is " + status.toString() + ".";
+			throw new ExecutionOrderException(errorMsg, status, SaleStatus.AWAITING_PAYMENT);
+		}
+
 		this.payment = payment;
 		status = SaleStatus.PAID;
 	}
