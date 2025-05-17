@@ -109,7 +109,7 @@ public class SaleService {
      * @return an {@link AmountDTO} representing the total cost of the sale after applying the discount.
      * @throws OperationFailedException if the discount service is unavailable and the discount cannot be applied.
      */
-    public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) throws OperationFailedException {
+    public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) {
         try {
             DiscountRequestDTO discountRequest = new DiscountRequestDTO(
                     customerId,

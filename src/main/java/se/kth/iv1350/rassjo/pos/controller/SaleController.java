@@ -81,7 +81,7 @@ public class SaleController {
      * @return an {@link AmountDTO} representing the total cost of the sale after applying the discount.
      * @throws OperationFailedException if the discount cannot be applied due to a system failure.
      */
-    public AmountDTO requestDiscount(CustomerIdentifierDTO customerId) throws OperationFailedException {
+    public AmountDTO requestDiscount(CustomerIdentifierDTO customerId) {
         return saleService.applyDiscount(customerId);
     }
 
