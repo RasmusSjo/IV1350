@@ -11,6 +11,7 @@ import se.kth.iv1350.rassjo.pos.integration.exceptions.ServiceUnavailableExcepti
 import se.kth.iv1350.rassjo.pos.model.CashPayment;
 import se.kth.iv1350.rassjo.pos.model.Sale;
 import se.kth.iv1350.rassjo.pos.model.SaleStatus;
+import se.kth.iv1350.rassjo.pos.model.exceptions.ExecutionOrderException;
 import se.kth.iv1350.rassjo.pos.utils.logging.FileLogger;
 
 import java.time.LocalDateTime;
@@ -48,8 +49,13 @@ public class SaleService {
 
     /**
      * Initiates a new sale by creating a {@code Sale} instance with the current date and time.
+     *
+     * @throws OperationFailedException if there already is an active sale.
      */
     public void startSale() {
+        if (currentSale != null) {
+            handleExecutionOrderException(null, "Starting of sale");
+        }
         LocalDateTime startTime = LocalDateTime.now();
         currentSale = new Sale(generateSaleId(), startTime);
     }
@@ -63,20 +69,34 @@ public class SaleService {
      * includes VAT and any applied discounts.
      *
      * @return an {@code AmountDTO} representing the total cost of the sale.
+     * @throws OperationFailedException if there is no active sale, or if the sale couldn't 
+     * be ended due to an invalid order of operations.
      */
     public AmountDTO endSale() {
-        currentSale.end();
+        ensureActiveSale();
+        try {
+            currentSale.end();
+        } catch (ExecutionOrderException e) {
+            handleExecutionOrderException(e, "Ending of sale");
+        }
         return Mapper.toDTO(currentSale.getTotalCost());
     }
-
 
     /**
      * Cancel the current sale.
      * </p>
      * Marks the current sale as {@link SaleStatus#CANCELLED} and then removes the reference to it.
+     *
+     * @throws OperationFailedException if there is no active sale, or if the sale couldn't 
+     * be cancelled due to an invalid order of operations.
      */
     public void cancelSale() {
-        currentSale.cancel();
+        ensureActiveSale();
+        try {
+            currentSale.cancel();
+        } catch (ExecutionOrderException e) {
+            handleExecutionOrderException(e, "Sale cancellation");
+        }
         currentSale = null;
     }
 
@@ -88,16 +108,22 @@ public class SaleService {
      * @param quantity the quantity of the item that is being added.
      * @return a {@code SaleDTO} representing the current state of the sale after adding the item.
      * @throws ItemNotFoundException if the item with the specified identifier doesn't exist.
+     * @throws OperationFailedException if there is no active sale, or if the item couldn't 
+     * be added due to an invalid order of operations.
      */
     public SaleDTO addItem(ItemIdentifierDTO itemId, int quantity) throws ItemNotFoundException {
-        if (currentSale.containsItemWithId(itemId)) {
-            currentSale.increaseItemWithId(itemId, quantity);
-            return Mapper.toDTO(currentSale);
+        ensureActiveSale();
+        try {
+            if (currentSale.containsItemWithId(itemId)) {
+                currentSale.increaseItemWithId(itemId, quantity);
+            }
+            else {
+                ItemDTO itemInformation = inventoryHandler.getItemInformation(itemId);
+                currentSale.addItem(itemInformation, quantity);
+            }
+        } catch (ExecutionOrderException e) {
+            handleExecutionOrderException(e, "Addition of item");
         }
-
-        ItemDTO itemInformation = inventoryHandler.getItemInformation(itemId);
-        currentSale.addItem(itemInformation, quantity);
-
         return Mapper.toDTO(currentSale);
     }
 
@@ -107,18 +133,23 @@ public class SaleService {
      *
      * @param customerId the identifier of the customer for whom the discount is being sought.
      * @return an {@link AmountDTO} representing the total cost of the sale after applying the discount.
-     * @throws OperationFailedException if the discount service is unavailable and the discount cannot be applied.
+     * @throws OperationFailedException if there is no active sale, if the sale isn't in the
+     * {@link SaleStatus#AWAITING_PAYMENT} state, or if the discount service is unavailable.
      */
     public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) {
+        ensureActiveSale();
         try {
+            currentSale.ensureAwaitingPayment();
             DiscountRequestDTO discountRequest = createDiscountRequest(customerId);
             DiscountDTO discount = discountHandler.getDiscount(discountRequest);
             currentSale.applyDiscount(discount);
-            return Mapper.toDTO(currentSale.getTotalCost());
+        } catch (ExecutionOrderException e) {
+            handleExecutionOrderException(e, "Application of discount");
         } catch (ServiceUnavailableException e) {
             logger.error("Discount service is unavailable.", e);
             throw new OperationFailedException("Could not apply discount at this time. Try again later.", e);
         }
+        return Mapper.toDTO(currentSale.getTotalCost());
     }
 
     private DiscountRequestDTO createDiscountRequest(CustomerIdentifierDTO customerId) {
@@ -134,15 +165,39 @@ public class SaleService {
      *
      * @param paidAmount an {@code AmountDTO} representing the cash amount paid by the customer.
      * @return an {@code AmountDTO} representing the change to be returned to the customer.
+     * @throws OperationFailedException if there is no active sale, or if the payment couldn't
+     * be processed due to an invalid order of operations.
      */
     public AmountDTO processCashPayment(AmountDTO paidAmount) {
+        ensureActiveSale();
+        try {
+            currentSale.ensureAwaitingPayment();
+        } catch (ExecutionOrderException e) {
+            handleExecutionOrderException(e, "Payment");
+        }
         CashPayment payment = new CashPayment(currentSale.getTotalCost(), Mapper.toDomain(paidAmount));
         paymentService.processPayment(currentSale, payment);
+
+        // Since the AWAITING_PAYMENT state has been ensured, we don't need a try-catch here
         currentSale.recordPayment(payment);
 
         inventoryHandler.updateInventory(Mapper.toDTO(currentSale));
         accountingHandler.recordSale(Mapper.toDTO(currentSale));
 
         return Mapper.toDTO(payment.getChange());
+    }
+
+    private void ensureActiveSale() {
+        if (currentSale == null) {
+            String errorMsg = "This attempted operation can't be performed if there isn't a sale in progress.";
+            logger.error(errorMsg);
+            throw new OperationFailedException(errorMsg);
+        }
+    }
+
+    private void handleExecutionOrderException(IllegalStateException e, String operationName) {
+        String errorMsg = operationName + " couldn't be performed.";
+        logger.error(errorMsg, e);
+        throw new OperationFailedException(errorMsg, e);
     }
 }
