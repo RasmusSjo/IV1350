@@ -111,10 +111,7 @@ public class SaleService {
      */
     public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) {
         try {
-            DiscountRequestDTO discountRequest = new DiscountRequestDTO(
-                    customerId,
-                    Mapper.toDTO(currentSale.getTotalCost()),
-                    Mapper.toDTO(currentSale.getItems()));
+            DiscountRequestDTO discountRequest = createDiscountRequest(customerId);
             DiscountDTO discount = discountHandler.getDiscount(discountRequest);
             currentSale.applyDiscount(discount);
             return Mapper.toDTO(currentSale.getTotalCost());
@@ -122,6 +119,13 @@ public class SaleService {
             logger.error("Discount service is unavailable.", e);
             throw new OperationFailedException("Could not apply discount at this time. Try again later.", e);
         }
+    }
+
+    private DiscountRequestDTO createDiscountRequest(CustomerIdentifierDTO customerId) {
+        return new DiscountRequestDTO(
+                customerId,
+                Mapper.toDTO(currentSale.getTotalCost()),
+                Mapper.toDTO(currentSale.getItems()));
     }
 
     /**
