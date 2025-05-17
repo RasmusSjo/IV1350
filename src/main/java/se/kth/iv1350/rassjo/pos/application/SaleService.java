@@ -45,6 +45,7 @@ public class SaleService {
         discountHandler = handlerFactory.getDiscountHandler();
         logger = FileLogger.getInstance();
         currentSale = null;
+        logger.info("New SaleService instance created.");
     }
 
     /**
@@ -58,6 +59,7 @@ public class SaleService {
         }
         LocalDateTime startTime = LocalDateTime.now();
         currentSale = new Sale(generateSaleId(), startTime);
+        logger.info("New sale started.");
     }
 
     private String generateSaleId() {
@@ -79,6 +81,7 @@ public class SaleService {
         } catch (ExecutionOrderException e) {
             handleExecutionOrderException(e, "Ending of sale");
         }
+        logger.info("Sale ended.");
         return Mapper.toDTO(currentSale.getTotalCost());
     }
 
@@ -98,6 +101,7 @@ public class SaleService {
             handleExecutionOrderException(e, "Sale cancellation");
         }
         currentSale = null;
+        logger.info("Sale cancelled.");
     }
 
     /**
@@ -116,10 +120,12 @@ public class SaleService {
         try {
             if (currentSale.containsItemWithId(itemId)) {
                 currentSale.increaseItemWithId(itemId, quantity);
+                logger.info("Quantity of item with id " + itemId.id() + " increased by " + quantity + " units.");
             }
             else {
                 ItemDTO itemInformation = inventoryHandler.getItemInformation(itemId);
                 currentSale.addItem(itemInformation, quantity);
+                logger.info("Item with id " + itemId.id() + " added to sale.");
             }
         } catch (ExecutionOrderException e) {
             handleExecutionOrderException(e, "Addition of item");
@@ -149,6 +155,7 @@ public class SaleService {
             logger.error("Discount service is unavailable.", e);
             throw new OperationFailedException("Could not apply discount at this time. Try again later.", e);
         }
+        logger.info("Discount applied to sale.");
         return Mapper.toDTO(currentSale.getTotalCost());
     }
 
@@ -183,6 +190,8 @@ public class SaleService {
 
         inventoryHandler.updateInventory(Mapper.toDTO(currentSale));
         accountingHandler.recordSale(Mapper.toDTO(currentSale));
+
+        logger.info("Payment processed for sale.");
 
         return Mapper.toDTO(payment.getChange());
     }
