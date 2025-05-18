@@ -200,6 +200,8 @@ public class SaleService {
         inventoryHandler.updateInventory(Mapper.toDTO(currentSale));
         accountingHandler.recordSale(Mapper.toDTO(currentSale));
 
+        currentSale = null;
+
         logger.info("Payment processed for sale.");
 
         return Mapper.toDTO(payment.getChange());
