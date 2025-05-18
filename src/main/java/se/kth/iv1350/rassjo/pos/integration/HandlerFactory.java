@@ -26,7 +26,7 @@ public class HandlerFactory {
      * Retrieves the {@link InventoryHandler} instance, which is responsible for
      * managing inventory operations.
      *
-     * @return the {@code InventoryHandler} instance managed by this factory class.
+     * @return the {@link InventoryHandler} instance managed by this factory class.
      */
     public InventoryHandler getInventoryHandler() {
         return inventoryHandler;
@@ -36,7 +36,7 @@ public class HandlerFactory {
      * Retrieves the {@link AccountingHandler} instance, which is responsible for
      * handling operations related to the accounting system.
      *
-     * @return the {@code AccountingHandler} instance managed by this factory class.
+     * @return the {@link AccountingHandler} instance managed by this factory class.
      */
     public AccountingHandler getAccountingHandler() {
         return accountingHandler;
@@ -46,17 +46,17 @@ public class HandlerFactory {
      * Retrieves the {@link DiscountHandler} instance, which is responsible for
      * managing discount-related operations.
      *
-     * @return the {@code DiscountHandler} instance managed by this factory class.
+     * @return the {@link DiscountHandler} instance managed by this factory class.
      */
     public DiscountHandler getDiscountHandler() {
         return discountHandler;
     }
 
     /**
-     * Retrieves the {@code ReceiptPrinter} instance, which is responsible for
+     * Retrieves the {@link ReceiptPrinter} instance, which is responsible for
      * printing receipts in the POS system.
      *
-     * @return the {@code ReceiptPrinter} instance managed by this factory class.
+     * @return the {@link ReceiptPrinter} instance managed by this factory class.
      */
     public ReceiptPrinter getReceiptPrinter() {
         return receiptPrinter;

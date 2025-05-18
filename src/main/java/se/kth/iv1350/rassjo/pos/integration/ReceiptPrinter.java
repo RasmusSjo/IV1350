@@ -9,18 +9,17 @@ import se.kth.iv1350.rassjo.pos.integration.DTOs.ReceiptDTO;
 public class ReceiptPrinter {
 
     /**
-     * Creates a new instance of the ReceiptPrinter.
-     * This constructor initializes the ReceiptPrinter, which is responsible
-     * for formatting and printing receipt information.
+     * Creates a new instance of the ReceiptPrinter. This constructor initializes the
+     * {@link ReceiptPrinter}, which is responsible for formatting and printing receipt information.
      */
     ReceiptPrinter() {
     }
 
     /**
-     * Prints the string representation of the provided {@code Receipt} object to the console.
+     * Prints the string representation of the provided {@link ReceiptDTO} object to the console.
      *
-     * @param receipt the {@code Receipt} object containing sales and payment information to be printed.
-     *                The receipt's {@code toString} method is used for formatting the output.
+     * @param receipt the {@link ReceiptDTO} object containing sales and payment information to be printed.
+     *                The receipt's {@link ReceiptDTO#toString toString} method is used for formatting the output.
      */
     public void printReceipt(ReceiptDTO receipt) {
         System.out.println(receipt.toString());

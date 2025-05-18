@@ -57,7 +57,7 @@ public class FileLogger {
     }
 
     /**
-     * Logs a {@link Level#DEBUG}-level message intended for debugging purposes.
+     * Logs a {@link Level#DEBUG DEBUG}-level message intended for debugging purposes.
      *
      * @param message the message to be logged
      */
@@ -66,7 +66,7 @@ public class FileLogger {
     }
 
     /**
-     * Logs a {@link Level#INFO}-level message intended for general application progress.
+     * Logs a {@link Level#INFO INFO}-level message intended for general application progress.
      *
      * @param message the message to be logged
      */
@@ -75,7 +75,7 @@ public class FileLogger {
     }
 
     /**
-     * Logs a {@link Level#WARN}-level message intended for potentially harmful situations.
+     * Logs a {@link Level#WARN WARN}-level message intended for potentially harmful situations.
      *
      * @param message the message to be logged
      */
@@ -84,7 +84,7 @@ public class FileLogger {
     }
 
     /**
-     * Logs a {@link Level#ERROR}-level message intended for serious
+     * Logs a {@link Level#ERROR ERROR}-level message intended for serious
      * issues that may affect application execution.
      *
      * @param message the message to be logged
@@ -94,7 +94,7 @@ public class FileLogger {
     }
 
     /**
-     * Logs a {@link Level#ERROR}-level message along with a throwable that provides additional context about
+     * Logs a {@link Level#ERROR ERROR}-level message along with a throwable that provides additional context about
      * the error. This is typically used for serious issues that may affect application execution.
      *
      * @param message the message to be logged, describing the error.

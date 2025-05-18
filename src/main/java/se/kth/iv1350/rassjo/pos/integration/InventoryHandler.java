@@ -15,7 +15,7 @@ public class InventoryHandler {
     private final Map<ItemIdentifierDTO, ItemDTO> inventory;
 
     /**
-     * Creates a new instance of the InventoryHandler.
+     * Creates a new instance of the {@link InventoryHandler}.
      */
     InventoryHandler() {
         inventory = new HashMap<>();
@@ -40,7 +40,7 @@ public class InventoryHandler {
     /**
      * Updates the inventory system with the details of a completed sale.
      *
-     * @param saleInformation the {@code SaleDTO} object containing detailed
+     * @param saleInformation the {@link SaleDTO} object containing detailed
      *                        information about the sale.
      */
     public void updateInventory(SaleDTO saleInformation) {

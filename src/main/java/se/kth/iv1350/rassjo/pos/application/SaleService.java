@@ -32,10 +32,10 @@ public class SaleService {
     private Sale currentSale;
 
     /**
-     * Constructs an instance of the {@code SaleService} class, which is responsible
+     * Constructs an instance of the {@link SaleService} class, which is responsible
      * for managing the lifecycle of a sale.
      *
-     * @param handlerFactory the {@code HandlerFactory} instance used to retrieve the
+     * @param handlerFactory the {@link HandlerFactory} instance used to retrieve the
      *                       necessary handlers the service depend on.
      */
     public SaleService(HandlerFactory handlerFactory) {
@@ -58,7 +58,8 @@ public class SaleService {
     }
 
     /**
-     * Initiates a new sale by creating a {@code Sale} instance with the current date and time.
+     * Initiates a new sale by creating a {@link Sale} instance with the current date and time
+     * and generating a unique id for it.
      *
      * @throws OperationFailedException if there already is an active sale.
      */
@@ -79,7 +80,7 @@ public class SaleService {
      * Ends the current sale and returns the total cost of the sale, which
      * includes VAT and any applied discounts.
      *
-     * @return an {@code AmountDTO} representing the total cost of the sale.
+     * @return an {@link AmountDTO} representing the total cost of the sale.
      * @throws OperationFailedException if there is no active sale, or if the sale couldn't 
      * be ended due to an invalid order of operations.
      */
@@ -97,7 +98,7 @@ public class SaleService {
     /**
      * Cancel the current sale.
      * </p>
-     * Marks the current sale as {@link SaleStatus#CANCELLED} and then removes the reference to it.
+     * Marks the current sale as {@link SaleStatus#CANCELLED CANCELLED} and then removes the reference to it.
      *
      * @throws OperationFailedException if there is no active sale, or if the sale couldn't 
      * be cancelled due to an invalid order of operations.
@@ -119,7 +120,7 @@ public class SaleService {
      *
      * @param itemId   the identifier of the item that will be added to the sale.
      * @param quantity the quantity of the item that is being added.
-     * @return a {@code SaleDTO} representing the current state of the sale after adding the item.
+     * @return a {@link SaleDTO} representing the current state of the sale after adding the item.
      * @throws ItemNotFoundException if the item with the specified identifier doesn't exist.
      * @throws OperationFailedException if there is no active sale, or if the item couldn't 
      * be added due to an invalid order of operations.
@@ -149,7 +150,7 @@ public class SaleService {
      * @param customerId the identifier of the customer for whom the discount is being sought.
      * @return an {@link AmountDTO} representing the total cost of the sale after applying the discount.
      * @throws OperationFailedException if there is no active sale, if the sale isn't in the
-     * {@link SaleStatus#AWAITING_PAYMENT} state, or if the discount service is unavailable.
+     * {@link SaleStatus#AWAITING_PAYMENT AWAITING_PAYMENT} state, or if the discount service is unavailable.
      */
     public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) {
         ensureActiveSale();
@@ -179,8 +180,8 @@ public class SaleService {
      * Processes a cash payment for the current sale, updates the system with payment details,
      * and adjusts the inventory and accounting systems accordingly.
      *
-     * @param paidAmount an {@code AmountDTO} representing the cash amount paid by the customer.
-     * @return an {@code AmountDTO} representing the change to be returned to the customer.
+     * @param paidAmount an {@link AmountDTO} representing the cash amount paid by the customer.
+     * @return an {@link AmountDTO} representing the change to be returned to the customer.
      * @throws OperationFailedException if there is no active sale, or if the payment couldn't
      * be processed due to an invalid order of operations.
      */

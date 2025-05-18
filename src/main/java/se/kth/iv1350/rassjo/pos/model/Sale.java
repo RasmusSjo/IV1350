@@ -25,12 +25,12 @@ public class Sale {
 	private SaleStatus status;
 
 	/**
-	 * Initializes a new instance of the {@code Sale} class with the specified sale identifier
+	 * Initializes a new instance of the {@link Sale} class with the specified sale identifier
 	 * and start time. Sets the initial state of the sale, including default values for cost,
 	 * VAT, payment, and item collection.
 	 *
 	 * @param saleId the unique identifier for the sale.
-	 * @param startTime the date and time the sale was started.
+	 * @param startTime the {@link LocalDateTime} object with the start date and time of the sale.
 	 */
 	public Sale(String saleId, LocalDateTime startTime) {
 		this.saleId = saleId;
@@ -46,7 +46,7 @@ public class Sale {
 	/**
 	 * Retrieves the unique identifier associated with this sale.
 	 *
-	 * @return a {@code String} representing the unique identifier of the sale.
+	 * @return a string representing the unique identifier of the sale.
 	 */
 	public String getSaleId() {
 		return saleId;
@@ -55,7 +55,7 @@ public class Sale {
 	/**
 	 * Retrieves the start time of the sale.
 	 *
-	 * @return an {@code LocalDateTime} object representing the time the sale was initiated.
+	 * @return an {@link LocalDateTime} object representing the time the sale was initiated.
 	 */
 	public LocalDateTime getStartTime() {
 		return startTime;
@@ -64,7 +64,7 @@ public class Sale {
 	/**
 	 * Retrieves the total cost of the sale. This value includes VAT and any applied discounts.
 	 *
-	 * @return an {@code Amount} representing the total cost of the sale.
+	 * @return an {@link Amount} representing the total cost of the sale.
 	 */
 	public Amount getTotalCost() {
 		return totalCost;
@@ -74,7 +74,7 @@ public class Sale {
 	 * Retrieves the total VAT for the sale. The returned value represents the total
 	 * calculated VAT amount for all items after discounts.
 	 *
-	 * @return an {@code Amount} representing the total VAT for the sale.
+	 * @return an {@link Amount} representing the total VAT for the sale.
 	 */
 	public Amount getTotalVat() {
 		return totalVat;
@@ -83,7 +83,7 @@ public class Sale {
 	/**
 	 * Retrieves the cash payment details for the current sale.
 	 *
-	 * @return a {@code CashPayment} object if a payment has been
+	 * @return a {@link CashPayment} object if a payment has been
 	 * recorded; otherwise {@code null}.
 	 */
 	public CashPayment getPayment() {
@@ -91,9 +91,9 @@ public class Sale {
 	}
 
 	/**
-	 * Retrieves a list of all {@link SaleItem} in the sale.
+	 * Retrieves a list of all items in the sale.
 	 *
-	 * @return a list of {@code SaleItem} containing all items in the sale.
+	 * @return a list of {@link SaleItem} containing all items in the sale.
 	 */
 	public List<SaleItem> getItems() {
         return new ArrayList<>(items.values());
@@ -102,7 +102,7 @@ public class Sale {
 	/**
 	 * Retrieves the last item added to the current sale.
 	 *
-	 * @return a {@code SaleItem} representing the last item added to the sale,
+	 * @return a {@link SaleItem} representing the last item added to the sale,
 	 *         or {@code null} if no items have been added.
 	 */
 	public SaleItem getLastAddedItem() {
@@ -112,8 +112,9 @@ public class Sale {
 	/**
 	 * Retrieves the current status of the sale.
 	 *
-	 * @return the current {@code SaleStatus} of the sale, which can be one
-	 * of {@code REGISTERING}, {@code AWAITING_PAYMENT}, or {@code PAID}.
+	 * @return the current {@link SaleStatus} of the sale, which can be one
+	 * of {@link SaleStatus#REGISTERING REGISTERING}, {@link SaleStatus#AWAITING_PAYMENT AWAITING_PAYMENT},
+	 * {@link SaleStatus#PAID PAID}, or {@link SaleStatus#CANCELLED CANCELLED}.
 	 */
 	public SaleStatus getStatus() {
 		return status;
@@ -122,7 +123,7 @@ public class Sale {
 	/**
 	 * Checks if the current sale contains an item with the specified identifier.
 	 *
-	 * @param itemId the {@code ItemIdentifierDTO} representing the identifier of the item to be checked.
+	 * @param itemId the {@link ItemIdentifierDTO} representing the identifier of the item to be checked.
 	 * @return {@code true} if the item is present in the sale, {@code false} otherwise.
 	 */
 	public boolean containsItemWithId(ItemIdentifierDTO itemId) {
@@ -133,9 +134,9 @@ public class Sale {
 	 * Increases the quantity of an item in the sale by a specified amount.
 	 * The item is identified using its identifier.
 	 *
-	 * @param itemId  the {@code ItemIdentifierDTO} of the item whose quantity will be increased.
+	 * @param itemId  the {@link ItemIdentifierDTO} of the item whose quantity will be increased.
 	 * @param quantity the quantity by which the item's current quantity should be increased.
-	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#REGISTERING}.
+	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#REGISTERING REGISTERING}.
 	 */
 	public void increaseItemWithId(ItemIdentifierDTO itemId, int quantity) {
 		if (status != SaleStatus.REGISTERING) {
@@ -155,7 +156,7 @@ public class Sale {
 	 * @param itemInformation the information of the item being added, including its
 	 *                        identifier, name, description, net price, and VAT rate.
 	 * @param quantity        the quantity of the item being added to the sale.
-	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#REGISTERING}.
+	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#REGISTERING REGISTERING}.
 	 */
 	public void addItem(ItemDTO itemInformation, int quantity) {
 		if (status != SaleStatus.REGISTERING) {
@@ -189,10 +190,10 @@ public class Sale {
 	}
 
 	/**
-	 * Marks the end of the sale. Updates the sale's status to {@link SaleStatus#AWAITING_PAYMENT},
+	 * Marks the end of the sale. Updates the sale's status to {@link SaleStatus#AWAITING_PAYMENT AWAITING_PAYMENT},
 	 * indicating that all items have been registered, and the sale is now awaiting payment.
 	 *
-	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#REGISTERING}.
+	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#REGISTERING REGISTERING}.
 	 */
 	public void end() {
 		if (status != SaleStatus.REGISTERING) {
@@ -204,10 +205,11 @@ public class Sale {
 
 
 	/**
-	 * Cancels the current sale by setting its status to {@link SaleStatus#CANCELLED}.
+	 * Cancels the current sale by setting its status to {@link SaleStatus#CANCELLED CANCELLED}.
 	 * This operation marks the sale as terminated and can only be set before the sale has been paid.
 	 *
-	 * @throws ExecutionOrderException if the sale's current status either {@link SaleStatus#PAID} or {@link SaleStatus#CANCELLED}.
+	 * @throws ExecutionOrderException if the sale's current status either {@link SaleStatus#PAID PAID}
+	 * or {@link SaleStatus#CANCELLED CANCELLED}.
 	 */
 	public void cancel() {
 		if (status == SaleStatus.PAID || status == SaleStatus.CANCELLED) {
@@ -218,11 +220,11 @@ public class Sale {
 	}
 
 	/**
-	 * Record a payment for the current sale. Updates the sale's status to {@link SaleStatus#PAID}
-	 * and stores the provided payment details.
+	 * Record a payment for the current sale. Updates the sale's status to
+	 * {@link SaleStatus#PAID PAID} and stores the provided payment details.
 	 *
 	 * @param payment the {@link CashPayment} object containing details of the completed payment.
-	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#AWAITING_PAYMENT}.
+	 * @throws ExecutionOrderException if the sale's current status isn't {@link SaleStatus#AWAITING_PAYMENT AWAITING_PAYMENT}.
 	 */
 	public void recordPayment(CashPayment payment) {
 		ensureAwaitingPayment();
@@ -231,10 +233,10 @@ public class Sale {
 	}
 
 	/**
-	 * Ensures that the status of the sale is {@link SaleStatus#AWAITING_PAYMENT}.
+	 * Ensures that the status of the sale is {@link SaleStatus#AWAITING_PAYMENT AWAITING_PAYMENT}.
 	 *
 	 * @throws ExecutionOrderException if the current sale status is not
-	 * {@link SaleStatus#AWAITING_PAYMENT}.
+	 * {@link SaleStatus#AWAITING_PAYMENT AWAITING_PAYMENT}.
 	 */
 	public void ensureAwaitingPayment() {
 		if (status != SaleStatus.AWAITING_PAYMENT) {
@@ -260,7 +262,7 @@ public class Sale {
 	/**
 	 * Returns the hash code for the {@link Sale} object.
 	 *
-	 * @return an integer representing the hash code of the {@code Sale} object.
+	 * @return an integer representing the hash code of the {@link Sale} object.
 	 */
 	@Override
 	public int hashCode() {

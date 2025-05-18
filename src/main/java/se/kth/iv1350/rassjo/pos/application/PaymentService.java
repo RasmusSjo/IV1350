@@ -14,34 +14,34 @@ import se.kth.iv1350.rassjo.pos.model.Sale;
  */
 public class PaymentService {
 
-    private final CashRegisterTracker cashRegisterHandler;
+    private final CashRegisterTracker cashRegisterTracker;
     private final ReceiptPrinter receiptPrinter;
 
     /**
-     * Creates a new instance of the {@code PaymentService} class.
-     * This constructor initializes the service by creating and associating
-     * a new {@code CashRegister} and a new {@code ReceiptPrinter}.
-     * The {@code CashRegister} is responsible for managing cash transactions
-     * and the running balance of the cash register, while the {@code ReceiptPrinter}
-     * handles printing of sales receipts.
+     * Creates an instance of the PaymentService.
+     *
+     * @param receiptPrinter the {@link ReceiptPrinter} responsible for printing
+     *                       receipts for processed payments.
      */
     public PaymentService(ReceiptPrinter receiptPrinter) {
-        this.cashRegisterHandler = new CashRegisterTracker();
+        this.cashRegisterTracker = new CashRegisterTracker();
         this.receiptPrinter = receiptPrinter;
     }
 
     /**
-     * Processes the payment for a sale by updating the cash register,
-     * generating a receipt, and printing it using the receipt printer.
+     * Processes the payment for the given sale.
+     * <p>
+     * This will update the cash register, dispense any change,
+     * and print a receipt.
      *
-     * @param sale    the {@code Sale} object providing details about the sale.
-     * @param payment the {@code CashPayment} object containing information
+     * @param sale    the {@link Sale} object providing details about the sale.
+     * @param payment the {@link CashPayment} object containing information
      *                about the payment.
      */
     public void processPayment(Sale sale, CashPayment payment) {
         // Here there would be logic for calling the actual cash register, not just its tracker
-        cashRegisterHandler.addPayment(payment);
-        cashRegisterHandler.dispenseChange(payment.getPaidAmount());
+        cashRegisterTracker.addPayment(payment);
+        cashRegisterTracker.dispenseChange(payment.getPaidAmount());
 
         ReceiptDTO receipt = new ReceiptDTO(Mapper.toDTO(sale), Mapper.toDTO(payment));
         receiptPrinter.printReceipt(receipt);

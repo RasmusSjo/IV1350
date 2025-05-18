@@ -7,7 +7,7 @@ package se.kth.iv1350.rassjo.pos.application.exceptions;
 public class OperationFailedException extends RuntimeException {
 
     /**
-     * Constructs a new {@code OperationFailedException} with the specified detail message.
+     * Constructs a new {@link OperationFailedException} with the specified detail message.
      *
      * @param message the detail message that provides information about the cause of the exception.
      */
