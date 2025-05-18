@@ -23,6 +23,8 @@ public class View {
      */
     public View(SaleController saleController) {
         this.saleController = saleController;
+        this.saleController.addRevenueObserver(new TotalRevenueView());
+        this.saleController.addRevenueObserver(new TotalRevenueFileOutput());
         this.logger = FileLogger.getInstance();
     }
 
@@ -39,20 +41,20 @@ public class View {
      * </ul>
      */
     public void sampleRun() {
+        // First sale
         saleController.startSale();
-
         addItem(new ItemIdentifierDTO(10101), 1);
-
         addItem(new ItemIdentifierDTO(10004), 3);
-
         addItem(new ItemIdentifierDTO(10009), 1);
-
-        addItem(new ItemIdentifierDTO(10004), 4);
-
         endSale();
-
         requestDiscount(1);
+        pay(new AmountDTO("1000.0"));
 
+        // Second sale
+        saleController.startSale();
+        addItem(new ItemIdentifierDTO(10102), 1);
+        addItem(new ItemIdentifierDTO(10007), 3);
+        endSale();
         pay(new AmountDTO("1000.0"));
     }
 
@@ -99,6 +101,6 @@ public class View {
 
     private void pay(AmountDTO amountDTO) {
         AmountDTO change = saleController.processCashPayment(amountDTO);
-        System.out.println("Change to give the customer: " + change.toString() + " SEK");
+        System.out.println("Change to give the customer: " + change.toString() + " SEK\n");
     }
 }
