@@ -49,6 +49,15 @@ public class SaleService {
     }
 
     /**
+     * Retrieves the currently active sale in the system.
+     *
+     * @return a {@link SaleDTO} representing the current active sale, or null if no sale is active.
+     */
+    public SaleDTO getCurrentSale() {
+        return currentSale == null ? null : Mapper.toDTO(currentSale);
+    }
+
+    /**
      * Initiates a new sale by creating a {@code Sale} instance with the current date and time.
      *
      * @throws OperationFailedException if there already is an active sale.
@@ -198,7 +207,7 @@ public class SaleService {
 
     private void ensureActiveSale() {
         if (currentSale == null) {
-            String errorMsg = "This attempted operation can't be performed if there isn't a sale in progress.";
+            String errorMsg = "The attempted operation can't be performed when there isn't an active sale in progress.";
             logger.error(errorMsg);
             throw new OperationFailedException(errorMsg);
         }
