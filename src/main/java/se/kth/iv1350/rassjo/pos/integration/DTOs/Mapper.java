@@ -54,7 +54,7 @@ public class Mapper {
                 toDTO(sale.getTotalCost()),
                 toDTO(sale.getTotalVat()),
                 toDTO(sale.getItems()),
-                toDTO(sale.getLastAddedItem()),
+                sale.getLastAddedItem() == null ? null : toDTO(sale.getLastAddedItem()),
                 sale.getPayment(),
                 sale.getStatus());
     }
