@@ -36,8 +36,8 @@ public class FileLogger {
      * @throws UncheckedIOException if an I/O error occurs during initialization.
      */
     private FileLogger() {
-        String LOG_INFO_FILE_PATH = LOG_INFO_FILE + DATE_FORMAT.format(LocalDateTime.now()) + LOG_FILE_EXTENSION;
-        String LOG_ERROR_FILE_PATH = LOG_ERROR_FILE + DATE_FORMAT.format(LocalDateTime.now()) + LOG_FILE_EXTENSION;
+        String LOG_INFO_FILE_PATH = LOG_INFO_FILE + getFormattedDate() + LOG_FILE_EXTENSION;
+        String LOG_ERROR_FILE_PATH = LOG_ERROR_FILE + getFormattedDate() + LOG_FILE_EXTENSION;
         try {
             Files.createDirectories(Path.of(BASE_PATH));
             infoLogWriter = new PrintWriter(new FileOutputStream(LOG_INFO_FILE_PATH, true), true);
@@ -45,6 +45,10 @@ public class FileLogger {
         } catch (IOException e) {
             throw new UncheckedIOException("An error occurred trying to initialise the file logger.", e);
         }
+    }
+
+    private String getFormattedDate() {
+        return DATE_FORMAT.format(LocalDateTime.now());
     }
 
     /**
