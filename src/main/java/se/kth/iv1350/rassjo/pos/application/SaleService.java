@@ -15,6 +15,8 @@ import se.kth.iv1350.rassjo.pos.model.exceptions.ExecutionOrderException;
 import se.kth.iv1350.rassjo.pos.utils.logging.FileLogger;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -29,6 +31,7 @@ public class SaleService {
     private final AccountingHandler accountingHandler;
     private final DiscountHandler discountHandler;
     private final FileLogger logger;
+    private final List<RevenueObserver> observers;
     private Sale currentSale;
 
     /**
@@ -39,6 +42,7 @@ public class SaleService {
      *                       necessary handlers the service depend on.
      */
     public SaleService(HandlerFactory handlerFactory) {
+        observers = new ArrayList<>();
         paymentService = new PaymentService(handlerFactory.getReceiptPrinter());
         inventoryHandler = handlerFactory.getInventoryHandler();
         accountingHandler = handlerFactory.getAccountingHandler();
@@ -203,9 +207,27 @@ public class SaleService {
 
         currentSale = null;
 
+        notifyObservers(payment);
+
         logger.info("Payment processed for sale.");
 
         return Mapper.toDTO(payment.getChange());
+    }
+
+    /**
+     * Registers an observer that will be notified when a payment is received.
+     *
+     * @param observer the observer to be registered, which will be notified
+     *                 of revenue updates.
+     */
+    public void addRevenueObserver(RevenueObserver observer) {
+        observers.add(observer);
+    }
+
+    private void notifyObservers(CashPayment payment) {
+        for (RevenueObserver observer : observers) {
+            observer.paymentReceived(Mapper.toDTO(payment));
+        }
     }
 
     private void ensureActiveSale() {

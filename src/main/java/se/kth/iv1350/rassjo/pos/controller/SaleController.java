@@ -1,5 +1,6 @@
 package se.kth.iv1350.rassjo.pos.controller;
 
+import se.kth.iv1350.rassjo.pos.application.RevenueObserver;
 import se.kth.iv1350.rassjo.pos.application.SaleService;
 import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
@@ -108,5 +109,15 @@ public class SaleController {
      */
     public AmountDTO processCashPayment(AmountDTO paidAmount) {
         return saleService.processCashPayment(paidAmount);
+    }
+
+    /**
+     * Adds a revenue observer to the system.
+     *
+     * @param observer the {@link RevenueObserver} to be added, which will receive
+     *                 notifications of revenue updates.
+     */
+    public void addRevenueObserver(RevenueObserver observer) {
+        saleService.addRevenueObserver(observer);
     }
 }
