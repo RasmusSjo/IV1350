@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  */
 public class TotalRevenueView implements RevenueObserver {
 
-    private static final String OUTPUT_FORMAT = "Total revenue after last sale is: %.2f%n";
+    private static final String OUTPUT_FORMAT = "Total revenue after last sale is: %.2f SEK%n";
     private final PrintWriter printer;
     private BigDecimal totalRevenue;
 
