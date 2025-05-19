@@ -26,7 +26,7 @@ public class DiscountHandler {
      * @return a {@link DiscountDTO} containing the calculated discount information.
      * @throws ServiceUnavailableException if the discount database is unavailable.
      */
-    public DiscountDTO getDiscount(DiscountRequestDTO discountRequest) {
+    public DiscountDTO getDiscount(DiscountRequestDTO discountRequest) throws ServiceUnavailableException {
         throw new ServiceUnavailableException("Discount database is unavailable.");
     }
 }
