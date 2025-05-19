@@ -3,6 +3,7 @@ package se.kth.iv1350.rassjo.pos.controller;
 import se.kth.iv1350.rassjo.pos.application.RevenueObserver;
 import se.kth.iv1350.rassjo.pos.application.SaleService;
 import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
+import se.kth.iv1350.rassjo.pos.application.exceptions.UncheckedOperationFailedException;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.CustomerIdentifierDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.ItemIdentifierDTO;
@@ -32,7 +33,7 @@ public class SaleController {
     /**
      * Initiates a new sale operation session.
      *
-     * @throws OperationFailedException if there already is an active sale in progress.
+     * @throws UncheckedOperationFailedException if there already is an active sale in progress.
      */
     public void startSale() {
         saleService.startSale();
@@ -42,7 +43,7 @@ public class SaleController {
      * Ends the current sale and retrieves the total cost of the sale (including VAT).
      *
      * @return an {@link AmountDTO} representing the total cost of the sale (including VAT).
-     * @throws OperationFailedException if there is no active sale, or if the sale couldn't be ended
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the sale couldn't be ended
      *                                  due to an invalid order of operations.
      */
     public AmountDTO endSale() {
@@ -52,7 +53,7 @@ public class SaleController {
     /**
      * Cancels the current sale session.
      *
-     * @throws OperationFailedException if there is no active sale, or if the sale couldn't
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the sale couldn't
      *                                  be cancelled due to an invalid order of operations.
      */
     public void cancelSale() {
@@ -65,7 +66,7 @@ public class SaleController {
      * @param itemId the identifier of the item to be added to the sale.
      * @return a {@link SaleDTO} representing the updated state of the sale after the item is added.
      * @throws ItemNotFoundException if the item with the specified identifier doesn't exist.
-     * @throws OperationFailedException if there is no active sale, or if the item couldn't be
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the item couldn't be
      *                                  added to the sale due to an invalid order of operations.
      */
     public SaleDTO addItem(ItemIdentifierDTO itemId) throws ItemNotFoundException {
@@ -79,7 +80,7 @@ public class SaleController {
      * @param quantity the quantity of the item to be added to the sale.
      * @return a {@link SaleDTO} representing the updated state of the sale after adding the item.
      * @throws ItemNotFoundException if the item with the specified identifier doesn't exist.
-     * @throws OperationFailedException if there is no active sale, or if the item couldn't be
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the item couldn't be
      *                                  added to the sale due to an invalid order of operations.
      */
     public SaleDTO addItem(ItemIdentifierDTO itemId, int quantity) throws ItemNotFoundException {
@@ -91,11 +92,11 @@ public class SaleController {
      *
      * @param customerId the identifier of the customer for whom the discount is requested.
      * @return an {@link AmountDTO} representing the total cost of the sale after applying the discount.
-     * @throws OperationFailedException if there is no active sale, if the discount couldn't be
-     *                                  applied due to an invalid order of operations, or if the
-     *                                  discount cannot be applied due to a system failure.
+     * @throws OperationFailedException if the discount cannot be applied due to a system failure.
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the discount couldn't be
+     * applied due to an invalid order of operations
      */
-    public AmountDTO requestDiscount(CustomerIdentifierDTO customerId) {
+    public AmountDTO requestDiscount(CustomerIdentifierDTO customerId) throws OperationFailedException {
         return saleService.applyDiscount(customerId);
     }
 
@@ -104,7 +105,7 @@ public class SaleController {
      *
      * @param paidAmount an {@link AmountDTO} representing the cash amount paid by the customer.
      * @return an {@link AmountDTO} representing the change to be returned to the customer.
-     * @throws OperationFailedException if there is no active sale, or if the payment couldn't be
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the payment couldn't be
      *                                  processed due to an invalid order of operations.
      */
     public AmountDTO processCashPayment(AmountDTO paidAmount) {

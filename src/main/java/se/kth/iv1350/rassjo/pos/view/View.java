@@ -1,6 +1,7 @@
 package se.kth.iv1350.rassjo.pos.view;
 
 import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
+import se.kth.iv1350.rassjo.pos.application.exceptions.UncheckedOperationFailedException;
 import se.kth.iv1350.rassjo.pos.controller.SaleController;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
@@ -76,6 +77,8 @@ public class View {
         } catch (ItemNotFoundException e) {
             System.out.println(e.getMessage() + " Try again with a different item ID.\n");
             logger.warn(e.getMessage());
+        } catch (UncheckedOperationFailedException e) {
+            throw e;
         } catch (Exception e) {
             System.out.println("An unknown error occurred trying to add the item.");
         }
@@ -94,6 +97,8 @@ public class View {
             System.out.println("Total cost (incl. VAT): " + totalCost.toString() + " SEK\n");
         } catch (OperationFailedException e) {
             System.out.println(e.getMessage());
+        } catch (UncheckedOperationFailedException e) {
+            throw e;
         } catch (Exception e) {
             System.out.println("An unknown error occurred trying to request the discount. Please try again later.\n");
         }

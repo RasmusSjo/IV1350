@@ -4,7 +4,7 @@ package se.kth.iv1350.rassjo.pos.application.exceptions;
  * Represents an exception thrown when there is an issue related to performing a
  * certain operation in the sale. Exception contains a descriptive message of the failure.
  */
-public class OperationFailedException extends RuntimeException {
+public class OperationFailedException extends Exception {
 
     /**
      * Constructs a new {@link OperationFailedException} with the specified detail message.

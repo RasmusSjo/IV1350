@@ -1,6 +1,7 @@
 package se.kth.iv1350.rassjo.pos.application;
 
 import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
+import se.kth.iv1350.rassjo.pos.application.exceptions.UncheckedOperationFailedException;
 import se.kth.iv1350.rassjo.pos.integration.AccountingHandler;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import se.kth.iv1350.rassjo.pos.integration.DiscountHandler;
@@ -65,7 +66,7 @@ public class SaleService {
      * Initiates a new sale by creating a {@link Sale} instance with the current date and time
      * and generating a unique id for it.
      *
-     * @throws OperationFailedException if there already is an active sale.
+     * @throws UncheckedOperationFailedException if there already is an active sale.
      */
     public void startSale() {
         if (currentSale != null) {
@@ -85,7 +86,7 @@ public class SaleService {
      * includes VAT and any applied discounts.
      *
      * @return an {@link AmountDTO} representing the total cost of the sale.
-     * @throws OperationFailedException if there is no active sale, or if the sale couldn't 
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the sale couldn't
      * be ended due to an invalid order of operations.
      */
     public AmountDTO endSale() {
@@ -104,7 +105,7 @@ public class SaleService {
      * </p>
      * Marks the current sale as {@link SaleStatus#CANCELLED CANCELLED} and then removes the reference to it.
      *
-     * @throws OperationFailedException if there is no active sale, or if the sale couldn't 
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the sale couldn't
      * be cancelled due to an invalid order of operations.
      */
     public void cancelSale() {
@@ -126,7 +127,7 @@ public class SaleService {
      * @param quantity the quantity of the item that is being added.
      * @return a {@link SaleDTO} representing the current state of the sale after adding the item.
      * @throws ItemNotFoundException if the item with the specified identifier doesn't exist.
-     * @throws OperationFailedException if there is no active sale, or if the item couldn't 
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the item couldn't
      * be added due to an invalid order of operations.
      */
     public SaleDTO addItem(ItemIdentifierDTO itemId, int quantity) throws ItemNotFoundException {
@@ -153,10 +154,11 @@ public class SaleService {
      *
      * @param customerId the identifier of the customer for whom the discount is being sought.
      * @return an {@link AmountDTO} representing the total cost of the sale after applying the discount.
-     * @throws OperationFailedException if there is no active sale, if the sale isn't in the
-     * {@link SaleStatus#AWAITING_PAYMENT AWAITING_PAYMENT} state, or if the discount service is unavailable.
+     * @throws OperationFailedException if the discount service is unavailable.
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the sale isn't in the
+     * {@link SaleStatus#AWAITING_PAYMENT AWAITING_PAYMENT} state
      */
-    public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) {
+    public AmountDTO applyDiscount(CustomerIdentifierDTO customerId) throws OperationFailedException {
         ensureActiveSale();
         try {
             currentSale.ensureAwaitingPayment();
@@ -186,7 +188,7 @@ public class SaleService {
      *
      * @param paidAmount an {@link AmountDTO} representing the cash amount paid by the customer.
      * @return an {@link AmountDTO} representing the change to be returned to the customer.
-     * @throws OperationFailedException if there is no active sale, or if the payment couldn't
+     * @throws UncheckedOperationFailedException if there is no active sale, or if the payment couldn't
      * be processed due to an invalid order of operations.
      */
     public AmountDTO processCashPayment(AmountDTO paidAmount) {
@@ -234,13 +236,13 @@ public class SaleService {
         if (currentSale == null) {
             String errorMsg = "The attempted operation can't be performed when there isn't an active sale in progress.";
             logger.error(errorMsg);
-            throw new OperationFailedException(errorMsg);
+            throw new UncheckedOperationFailedException(errorMsg);
         }
     }
 
     private void handleExecutionOrderException(IllegalStateException e, String operationName) {
         String errorMsg = operationName + " couldn't be performed.";
         logger.error(errorMsg, e);
-        throw new OperationFailedException(errorMsg, e);
+        throw new UncheckedOperationFailedException(errorMsg, e);
     }
 }
