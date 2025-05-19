@@ -2,6 +2,7 @@ package se.kth.iv1350.rassjo.pos.application;
 
 import org.junit.jupiter.api.*;
 import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
+import se.kth.iv1350.rassjo.pos.application.exceptions.UncheckedOperationFailedException;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import se.kth.iv1350.rassjo.pos.integration.HandlerFactory;
 import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
@@ -56,7 +57,10 @@ public class SaleServiceTest {
         void testStartSaleThrowsErrorIfSaleAlreadyInProgress() {
             saleService.startSale();
 
-            OperationFailedException exception = assertThrows(OperationFailedException.class, () -> saleService.startSale(), "Starting a sale while already in progress should throw an exception.");
+            UncheckedOperationFailedException exception = assertThrows(
+                    UncheckedOperationFailedException.class,
+                    () -> saleService.startSale(),
+                    "Starting a sale while already in progress should throw an exception.");
             assertEquals("Starting of sale couldn't be performed.", exception.getMessage(), "Exception should contain the correct error message.");
         }
     }
@@ -74,7 +78,10 @@ public class SaleServiceTest {
 
         @Test
         void testEndSaleThrowsErrorIfNoActiveSale() {
-            OperationFailedException exception = assertThrows(OperationFailedException.class, () -> saleService.endSale(), "Ending a sale with no active sale should throw an exception.");
+            UncheckedOperationFailedException exception = assertThrows(
+                    UncheckedOperationFailedException.class,
+                    () -> saleService.endSale(),
+                    "Ending a sale with no active sale should throw an exception.");
             assertEquals("The attempted operation can't be performed when there isn't an active sale in progress.", exception.getMessage(), "Exception should contain the correct error message.");
         }
     }
@@ -93,7 +100,10 @@ public class SaleServiceTest {
 
         @Test
         void testCancelSaleThrowsErrorIfNoActiveSale() {
-            OperationFailedException exception = assertThrows(OperationFailedException.class, () -> saleService.cancelSale(), "Cancelling a sale with no active sale should throw an exception.");
+            UncheckedOperationFailedException exception = assertThrows(
+                    UncheckedOperationFailedException.class,
+                    () -> saleService.cancelSale(),
+                    "Cancelling a sale with no active sale should throw an exception.");
             assertEquals("The attempted operation can't be performed when there isn't an active sale in progress.", exception.getMessage(), "Exception should contain the correct error message.");
         }
     }
@@ -150,8 +160,8 @@ public class SaleServiceTest {
 
         @Test
         void testAddItemThrowsErrorIfNoActiveSale() {
-            OperationFailedException exception = assertThrows(
-                    OperationFailedException.class,
+            UncheckedOperationFailedException exception = assertThrows(
+                    UncheckedOperationFailedException.class,
                     () -> saleService.addItem(FIRST_ITEM_ID, ONE),
                     "Adding an item without an active sale should throw an exception.");
             assertEquals("The attempted operation can't be performed when there isn't an active sale in progress.", exception.getMessage(), "Exception should contain the correct error message.");
@@ -172,8 +182,8 @@ public class SaleServiceTest {
             saleService.startSale();
             saleService.endSale();
 
-            OperationFailedException exception = assertThrows(
-                    OperationFailedException.class,
+            UncheckedOperationFailedException exception = assertThrows(
+                    UncheckedOperationFailedException.class,
                     () -> saleService.addItem(FIRST_ITEM_ID, ONE),
                     "Adding an item after the sale has been ended should throw an exception.");
             assertEquals("Addition of item couldn't be performed.", exception.getMessage(), "Exception should contain the correct error message.");
@@ -185,7 +195,10 @@ public class SaleServiceTest {
 
         @Test
         void testApplyDiscountThrowsErrorIfNoActiveSale() {
-            OperationFailedException exception = assertThrows(OperationFailedException.class, () -> saleService.applyDiscount(CUSTOMER_ID), "Applying a discount without an active sale should throw an exception.");
+            UncheckedOperationFailedException exception = assertThrows(
+                    UncheckedOperationFailedException.class,
+                    () -> saleService.applyDiscount(CUSTOMER_ID),
+                    "Applying a discount without an active sale should throw an exception.");
             assertEquals("The attempted operation can't be performed when there isn't an active sale in progress.", exception.getMessage(), "Exception should contain the correct error message.");
         }
 
@@ -193,8 +206,8 @@ public class SaleServiceTest {
         void testApplyDiscountThrowsErrorIfCalledBeforeSaleFinalization() {
             saleService.startSale();
 
-            OperationFailedException exception = assertThrows(
-                    OperationFailedException.class,
+            UncheckedOperationFailedException exception = assertThrows(
+                    UncheckedOperationFailedException.class,
                     () -> saleService.applyDiscount(CUSTOMER_ID),
                     "Applying a discount before the sale is set to Awaiting Payment state should throw an exception.");
             assertEquals("Application of discount couldn't be performed.", exception.getMessage(), "Exception should contain the correct error message.");
@@ -234,8 +247,8 @@ public class SaleServiceTest {
 
         @Test
         void testProcessCashPaymentThrowsErrorIfNoActiveSale() {
-            OperationFailedException exception = assertThrows(
-                    OperationFailedException.class,
+            UncheckedOperationFailedException exception = assertThrows(
+                    UncheckedOperationFailedException.class,
                     () -> saleService.processCashPayment(new AmountDTO("100.00")),
                     "Processing cash payment without an active sale should throw an exception.");
             assertEquals("The attempted operation can't be performed when there isn't an active sale in progress.", exception.getMessage(), "Exception should contain the correct error message.");
@@ -245,8 +258,8 @@ public class SaleServiceTest {
         void testProcessCashPaymentThrowsErrorIfSaleNotAwaitingPayment() {
             saleService.startSale();
 
-            OperationFailedException exception = assertThrows(
-                    OperationFailedException.class,
+            UncheckedOperationFailedException exception = assertThrows(
+                    UncheckedOperationFailedException.class,
                     () -> saleService.processCashPayment(new AmountDTO("100.00")),
                     "Processing cash payment before sale is in Awaiting Payment state should throw an exception.");
             assertEquals("Payment couldn't be performed.", exception.getMessage(), "Exception should contain the correct error message.");

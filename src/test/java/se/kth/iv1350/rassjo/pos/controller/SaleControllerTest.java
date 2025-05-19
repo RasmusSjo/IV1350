@@ -2,6 +2,7 @@ package se.kth.iv1350.rassjo.pos.controller;
 
 import org.junit.jupiter.api.*;
 import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
+import se.kth.iv1350.rassjo.pos.application.exceptions.UncheckedOperationFailedException;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.*;
 import se.kth.iv1350.rassjo.pos.integration.HandlerFactory;
 import se.kth.iv1350.rassjo.pos.integration.exceptions.ItemNotFoundException;
@@ -66,14 +67,14 @@ class SaleControllerTest {
                     "Canceling an active sale should not throw an exception");
 
             // Attempt to end the canceled sale and verify it behaves as if no sale was started
-            assertThrows(OperationFailedException.class,
+            assertThrows(UncheckedOperationFailedException.class,
                     () -> controller.endSale(),
                     "Ending a sale after cancellation should throw an OperationFailedException");
         }
 
         @Test
         void testCancelSaleWithoutStartingSale() {
-            assertThrows(OperationFailedException.class,
+            assertThrows(UncheckedOperationFailedException.class,
                     () -> controller.cancelSale(),
                     "Canceling a sale without starting one should throw an OperationFailedException");
         }
@@ -127,7 +128,7 @@ class SaleControllerTest {
             controller = new SaleController(handlerFactory);
 
             // TODO Should probably throw a different exception but not a requirement for this assignment.
-            assertThrows(OperationFailedException.class,
+            assertThrows(UncheckedOperationFailedException.class,
                     () -> controller.endSale(),
                     "Ending a sale before starting a sale should throw a NullPointerException");
         }
@@ -141,7 +142,7 @@ class SaleControllerTest {
             controller = new SaleController(handlerFactory);
 
             // TODO Should probably throw a different exception but not a requirement for this assignment.
-            assertThrows(OperationFailedException.class,
+            assertThrows(UncheckedOperationFailedException.class,
                     () -> controller.addItem(FIRST_ITEM_ID, ONE),
                     "Adding an item without starting a sale should throw OperationFailedException" );
         }
@@ -238,7 +239,7 @@ class SaleControllerTest {
         @Test
         void testRequestDiscountThrowsErrorWhenDiscountServiceUnavailable() {
             controller.startSale();
-            controller.cancelSale();
+            controller.endSale();
 
             assertThrows(
                     OperationFailedException.class,
