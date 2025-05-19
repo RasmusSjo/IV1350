@@ -15,6 +15,6 @@ public class ItemNotFoundException extends Exception {
      * @param unknownItemId the item id of the item that wasn't found.
      */
     public ItemNotFoundException(ItemIdentifierDTO unknownItemId) {
-        super("Item with ID " + unknownItemId.toString() + " not found in inventory.");
+        super("Item with ID '" + unknownItemId.toString() + "' not found in inventory.");
     }
 }
