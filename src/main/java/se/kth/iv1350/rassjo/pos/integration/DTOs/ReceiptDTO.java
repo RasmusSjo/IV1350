@@ -2,6 +2,12 @@ package se.kth.iv1350.rassjo.pos.integration.DTOs;
 
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a receipt for a completed sale. Contains information about the sale (e.g. items,
+ * start time, total cost, total VAT).
+ * </p>
+ * Has a {@link #toString} method for formatting the receipt to a printable format.
+ */
 public class ReceiptDTO {
 
     private static final int RECEIPT_WIDTH = 56;
@@ -19,11 +25,25 @@ public class ReceiptDTO {
     private final SaleDTO sale;
     private final CashPaymentDTO payment;
 
+    /**
+     * Creates an instance of {@link ReceiptDTO}, encapsulating information about a sale
+     * and its associated cash payment details.
+     *
+     * @param saleInformation {@link SaleDTO} object containing information about the sale.
+     * @param payment         {@link CashPaymentDTO} containing details about the payment made for the sale.
+     */
     public ReceiptDTO(SaleDTO saleInformation, CashPaymentDTO payment) {
         this.sale = saleInformation;
         this.payment = payment;
     }
 
+    /**
+     * Generates a formatted string representation of a receipt. The receipt includes a header,
+     * sale start time, details of purchased items, totals (including VAT), payment details,
+     * and a footer.
+     *
+     * @return a detailed, formatted string representation of the receipt.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -33,7 +33,7 @@ public class SaleItem {
     /**
      * Retrieves the unique identifier for this sale item.
      *
-     * @return an ItemIdentifierDTO representing the identifier of the item.
+     * @return an {@link ItemIdentifierDTO} representing the identifier of the item.
      */
     public ItemIdentifierDTO getId() {
         return itemInformation.itemId();
@@ -60,7 +60,7 @@ public class SaleItem {
     /**
      * Retrieves the base net price of this sale item.
      *
-     * @return an AmountDTO object representing the net price of the item.
+     * @return an {@link AmountDTO} object representing the net price of the item.
      */
     public AmountDTO getBaseNetPrice() {
         return itemInformation.baseNetPrice();
@@ -69,7 +69,7 @@ public class SaleItem {
     /**
      * Retrieves the VAT rate associated with this sale item.
      *
-     * @return a PercentageDTO representing the VAT rate of the item.
+     * @return a {@link PercentageDTO} representing the VAT rate of the item.
      */
     public PercentageDTO getVatRate() {
         return itemInformation.vatRate();
@@ -79,7 +79,7 @@ public class SaleItem {
      * Retrieves the final price of this sale item. The final price includes VAT
      * and any potential adjustments applied during the sale (e.g., by discounts).
      *
-     * @return an Amount object representing the final price of the item.
+     * @return an {@link Amount} object representing the final price of the item.
      */
     public Amount getFinalUnitPrice() {
         return finalUnitPrice;
@@ -89,7 +89,7 @@ public class SaleItem {
      * Retrieves the final total price of this sale item. The final total price is
      * calculated as the product of the final unit price and the quantity of the item.
      *
-     * @return an {@code Amount} representing the final total price of this sale item.
+     * @return an {@link Amount} representing the final total price of this sale item.
      */
     public Amount getFinalTotalPrice() {
         return finalTotalPrice;

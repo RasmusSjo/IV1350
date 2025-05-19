@@ -45,30 +45,39 @@ public class Mapper {
      * Converts the provided {@link Sale} object to a {@link SaleDTO}.
      *
      * @param sale the sale to convert
-     * @return the DTO representing the sale
+     * @return the {@link SaleDTO} representing the sale
      */
     public static SaleDTO toDTO(Sale sale) {
-        List<SaleItemDTO> items = new ArrayList<>();
-        for (SaleItem item : sale.getItems()) {
-            items.add(toDTO(item));
-        }
-
         return new SaleDTO(
                 sale.getSaleId(),
                 sale.getStartTime(),
                 toDTO(sale.getTotalCost()),
                 toDTO(sale.getTotalVat()),
-                items,
-                toDTO(sale.getLastAddedItem()),
+                toDTO(sale.getItems()),
+                sale.getLastAddedItem() == null ? null : toDTO(sale.getLastAddedItem()),
                 sale.getPayment(),
                 sale.getStatus());
     }
 
     /**
+     * Converts the provided list of {@link SaleItem} objects into a list of {@link SaleItemDTO} objects.
+     *
+     * @param items the list of {@link SaleItem} objects to convert.
+     * @return a list of {@link SaleItemDTO} objects representing the converted sale items.
+     */
+    public static List<SaleItemDTO> toDTO(List<SaleItem> items){
+        List<SaleItemDTO> dtos = new ArrayList<>();
+        for(SaleItem item : items){
+            dtos.add(toDTO(item));
+        }
+        return dtos;
+    }
+
+    /**
      * Converts the provided {@link SaleItem} object to a {@link SaleItemDTO}.
      *
-     * @param item the sale item to convert.
-     * @return the DTO representing the sale item.
+     * @param item the {@link SaleItem} object to convert.
+     * @return the {@link SaleItemDTO} representing the sale item.
      */
     public static SaleItemDTO toDTO(SaleItem item) {
         return new SaleItemDTO(
