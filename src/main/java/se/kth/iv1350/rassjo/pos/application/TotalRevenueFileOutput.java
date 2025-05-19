@@ -1,6 +1,5 @@
-package se.kth.iv1350.rassjo.pos.view;
+package se.kth.iv1350.rassjo.pos.application;
 
-import se.kth.iv1350.rassjo.pos.application.RevenueObserver;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.CashPaymentDTO;
 

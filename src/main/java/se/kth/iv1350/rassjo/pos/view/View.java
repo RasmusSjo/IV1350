@@ -1,5 +1,6 @@
 package se.kth.iv1350.rassjo.pos.view;
 
+import se.kth.iv1350.rassjo.pos.application.TotalRevenueFileOutput;
 import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
 import se.kth.iv1350.rassjo.pos.application.exceptions.UncheckedOperationFailedException;
 import se.kth.iv1350.rassjo.pos.controller.SaleController;
@@ -25,7 +26,6 @@ public class View {
     public View(SaleController saleController) {
         this.saleController = saleController;
         this.saleController.addRevenueObserver(new TotalRevenueView());
-        this.saleController.addRevenueObserver(new TotalRevenueFileOutput());
         this.logger = FileLogger.getInstance();
     }
 

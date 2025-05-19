@@ -2,6 +2,7 @@ package se.kth.iv1350.rassjo.pos.controller;
 
 import se.kth.iv1350.rassjo.pos.application.RevenueObserver;
 import se.kth.iv1350.rassjo.pos.application.SaleService;
+import se.kth.iv1350.rassjo.pos.application.TotalRevenueFileOutput;
 import se.kth.iv1350.rassjo.pos.application.exceptions.OperationFailedException;
 import se.kth.iv1350.rassjo.pos.application.exceptions.UncheckedOperationFailedException;
 import se.kth.iv1350.rassjo.pos.integration.DTOs.AmountDTO;
@@ -28,6 +29,7 @@ public class SaleController {
      */
     public SaleController(HandlerFactory handlerFactory) {
         saleService = new SaleService(handlerFactory);
+        addRevenueObserver(new TotalRevenueFileOutput());
     }
 
     /**
