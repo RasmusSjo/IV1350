@@ -34,7 +34,7 @@ public class InventoryHandler {
         if (inventory.containsKey(itemId)) {
             return inventory.get(itemId);
         }
-        throw new ItemNotFoundException("Item not found in inventory");
+        throw new ItemNotFoundException(itemId);
     }
 
     /**

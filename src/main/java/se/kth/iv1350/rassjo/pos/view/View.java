@@ -74,8 +74,8 @@ public class View {
             System.out.println("Total cost (incl. VAT): " + sale.totalCost().toString() + " SEK");
             System.out.println("Total VAT: " + sale.totalVat().toString() + " SEK\n");
         } catch (ItemNotFoundException e) {
-            logger.warn("Item with ID " + itemId.id() + " was not found.");
-            System.out.println("No item with ID " + itemId.id() + " was found.\n");
+            System.out.println(e.getMessage() + " Try again with a different item ID.\n");
+            logger.warn(e.getMessage());
         } catch (Exception e) {
             System.out.println("An unknown error occurred trying to add the item.");
         }
