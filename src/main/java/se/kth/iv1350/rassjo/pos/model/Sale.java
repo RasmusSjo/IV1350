@@ -25,16 +25,51 @@ public class Sale {
 	private SaleStatus status;
 
 	/**
-	 * Initializes a new instance of the {@link Sale} class with the specified sale identifier
-	 * and start time. Sets the initial state of the sale, including default values for cost,
-	 * VAT, payment, and item collection.
-	 *
-	 * @param saleId the unique identifier for the sale.
-	 * @param startTime the {@link LocalDateTime} object with the start date and time of the sale.
+	 * Builder class for creating {@link Sale} instances. Implements the Builder pattern.
 	 */
-	public Sale(String saleId, LocalDateTime startTime) {
-		this.saleId = saleId;
-		this.startTime = startTime;
+	public static class Builder {
+		private String saleId;
+		private LocalDateTime startTime;
+
+		/**
+		 * Sets the sale ID for the builder.
+		 *
+		 * @param saleId the unique identifier for the sale to be associated with this builder.
+		 * @return the {@link Builder} instance to allow method chaining.
+		 */
+		public Builder saleId(String saleId) {
+			this.saleId = saleId;
+			return this;
+		}
+
+		/**
+		 * Sets the start time for the builder.
+		 *
+		 * @param startTime the start time to be set, represented as a {@code LocalDateTime}.
+		 * @return the {@link Builder} instance to allow method chaining.
+		 */
+		public Builder startTime(LocalDateTime startTime) {
+			this.startTime = startTime;
+			return this;
+		}
+
+		/**
+		 * Builds and returns a {@link Sale} instance with the current state of the builder.
+		 *
+		 * @return a new {@link Sale} instance created based on the current builder configuration.
+		 * @throws IllegalStateException if the builder lacks required fields such as saleId or startTime.
+		 */
+		public Sale build() {
+			if (saleId == null || startTime == null) {
+				throw new IllegalStateException("Sale wasn't instantiated correctly");
+			}
+			return new Sale(this);
+		}
+	}
+
+	private Sale(Builder builder) {
+		this.saleId = builder.saleId;
+		this.startTime = builder.startTime;
 		totalCost = new Amount();
 		totalVat = new Amount();
 		payment = null;

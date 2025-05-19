@@ -72,8 +72,10 @@ public class SaleService {
         if (currentSale != null) {
             handleExecutionOrderException(null, "Starting of sale");
         }
-        LocalDateTime startTime = LocalDateTime.now();
-        currentSale = new Sale(generateSaleId(), startTime);
+        currentSale = new Sale.Builder()
+                .saleId(generateSaleId())
+                .startTime(LocalDateTime.now())
+                .build();
         logger.info("New sale started.");
     }
 
