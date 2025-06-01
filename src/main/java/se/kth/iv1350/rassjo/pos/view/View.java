@@ -75,12 +75,14 @@ public class View {
             System.out.println("Total cost (incl. VAT): " + sale.totalCost().toString() + " SEK");
             System.out.println("Total VAT: " + sale.totalVat().toString() + " SEK\n");
         } catch (ItemNotFoundException e) {
-            System.out.println(e.getMessage() + " Try again with a different item ID.\n");
-            logger.warn(e.getMessage());
+            System.out.println("Item with id: " + itemId.id() + " could not be found.  Try again with a different item ID.\n");
+            logger.warn("Item with id: " + itemId.id() + " could not be found.");
         } catch (UncheckedOperationFailedException e) {
-            throw e;
+            System.out.println();
+            logger.error("Item couldn't be added, likely due to an invalid order of operations.", e);
         } catch (Exception e) {
             System.out.println("An unknown error occurred trying to add the item.");
+            logger.error("An unknown error occurred trying to add the item.", e);
         }
     }
 
@@ -96,9 +98,11 @@ public class View {
             AmountDTO totalCost = saleController.requestDiscount(new CustomerIdentifierDTO(customerId));
             System.out.println("Total cost (incl. VAT): " + totalCost.toString() + " SEK\n");
         } catch (OperationFailedException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Discount operation failed.");
+            logger.error("Discount operation failed.", e);
         } catch (UncheckedOperationFailedException e) {
-            throw e;
+            System.out.println();
+            logger.error("Discount couldn't be requested, likely due to an invalid order of operations.", e);
         } catch (Exception e) {
             System.out.println("An unknown error occurred trying to request the discount. Please try again later.\n");
         }
